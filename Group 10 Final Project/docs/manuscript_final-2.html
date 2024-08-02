@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Edward Cruz, Jr., Leonel G. Salazar, Amelia Tristan, Mojisola Popoola">
-<meta name="dcterms.date" content="2024-08-01">
 
-<title>YOURNAME Data Analysis Portfolio - Honey Bee Colonies Impacted by Varroa, American Foulbrood and Global Warming</title>
+<title>Leonel Salazar Data Analysis Portfolio - R Coding Exercise</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -115,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">YOURNAME Data Analysis Portfolio</span>
+    <span class="navbar-title">Leonel Salazar Data Analysis Portfolio</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -125,7 +123,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./aboutme.html"> 
+    <a class="nav-link" href="./aboutme.qmd"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -134,19 +132,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
         <li>
-    <a class="dropdown-item" href="./starter-analysis-exercise/products/report/starter-analysis-report.html">
- <span class="dropdown-text">Starter Analysis Exercise</span></a>
+    <a class="dropdown-item" href="./starter-analysis-exercise/products/report/manuscript_final-2.qmd">
+ <span class="dropdown-text">Group10 Analysis Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./coding-exercise/coding-exercise.html">
+    <a class="dropdown-item" href="./coding-exercise/coding-exercise.qmd">
  <span class="dropdown-text">R Coding Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./presentation-exercise/presentation-exercise.html">
+    <a class="dropdown-item" href="./data-exercise/data-exercise.qmd">
+ <span class="dropdown-text">Data Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./cdcdata-exercise/cdcdata-exercise.qmd">
+ <span class="dropdown-text">CDC Data Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./presentation-exercise/presentation-exercise.qmd">
  <span class="dropdown-text">Presentation Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./tidytuesday-exercise/tidytuesday-exercise.html">
+    <a class="dropdown-item" href="./tidytuesday-exercise/tidytuesday-exercise.qmd">
  <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
   </li>  
     </ul>
@@ -154,7 +160,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="./URL-TO-THIS-REPOSITORY-HERE"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/Leonel-Salazar/leonelsalazar-P2-portfolio"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -175,26 +181,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Honey Bee Colonies Impacted by Varroa, American Foulbrood and Global Warming</h1>
+<h1 class="title">R Coding Exercise</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Edward Cruz, Jr., Leonel G. Salazar, Amelia Tristan, Mojisola Popoola </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 1, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -204,16 +198,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="summaryabstract" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Summary/Abstract</h1>
+<section id="summaryabstract" class="level1">
+<h1>Summary/Abstract</h1>
 <p>Group Ten is conducting a comprehensive analysis of historical data from various public agencies to evaluate the impact of Varroa mites, American Foulbrood, and global warming on hive losses in the United States.This research utilizes extensive datasets from the National Agricultural Statistics Service, the Agricultural Statistics Board, and the United States Department of Agriculture (USDA), encompassing multiple years of data. The data highlights the topic on hive losses attributed to mites, bacterial infections, and environmental factors related to global warming. Through advanced data visualization techniques in R, we aim to demonstrate and validate the detrimental effects of these factors on honeybee colonies, highlighting the consequent implications for honey production and broader food security. <strong><em>Dennis and Kemp’s study on honey bee hive collapse <span class="citation" data-cites="hivecollapse">[@hivecollapse]</span> provides important insights into Allee effects and ecological resilience.</em></strong></p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="introduction" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Introduction</h1>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
 <p>Honeybees have served as nature’s pollinators for centuries. With their relationship with humans documented as far back as ancient Egyptian and Hindu cultures. Historically, humans have maintained beehives and utilized honey for its medicinal properties in various civilizations, including the Egyptians, Assyrians, Chinese, Greeks, and Romans. Honey’s natural antibacterial qualities made it a valuable treatment for wounds. This was a practice continued by Romans and Russians during World War I. Honeybees and other pollinators are essential for food production and nutritional security. But even though they face numerous survival challenges Varroa mites pose a significant threat to bee colonies. These tiny red-brown parasites live on adult honeybees and reproduce on larvae and pupae. Another major threat is American Foulbrood Disease (AFB). This is caused by the bacterium Paenibacillus larvae, which is fatal to honeybee larvae and requires incineration of infected hives to prevent its spread. The impact of climate change on honeybee colony losses is a growing area of research. While correlations have been found between higher winter temperatures and increased colony losses, the effects of warmer autumn and winter temperatures on colony dynamics and survival require further investigation. <strong><em>Dennis and Kemp’s study on honey bee hive collapse <span class="citation" data-cites="hivecollapse">[@hivecollapse]</span> provides important insights into Allee effects and ecological resilience.</em></strong><span class="citation" data-cites="usda_honey_bees usda_nass">[@usda_honey_bees; @usda_nass]</span></p>
-<section id="composition-of-honey" class="level3" data-number="2.0.1">
-<h3 data-number="2.0.1" class="anchored" data-anchor-id="composition-of-honey"><span class="header-section-number">2.0.1</span> Composition of Honey</h3>
+<section id="composition-of-honey" class="level3">
+<h3 class="anchored" data-anchor-id="composition-of-honey">Composition of Honey</h3>
 <p>The first image is a pie chart that illustrates the composition of honey by percentage. The main components are:</p>
 <ul>
 <li><strong>Fructose</strong>: 38.5%</li>
@@ -238,8 +232,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="spread-of-varroa-mites" class="level3" data-number="2.0.2">
-<h3 data-number="2.0.2" class="anchored" data-anchor-id="spread-of-varroa-mites"><span class="header-section-number">2.0.2</span> Spread of Varroa Mites</h3>
+<section id="spread-of-varroa-mites" class="level3">
+<h3 class="anchored" data-anchor-id="spread-of-varroa-mites">Spread of Varroa Mites</h3>
 <p>The second image is a map illustrating the spread of Varroa mites in the United States from 1986 to 1995. The map uses different colors to represent the year of the first appearance of Varroa mites in each state:</p>
 <ul>
 <li><strong>1986 - 1987</strong>: Red</li>
@@ -334,40 +328,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong><em>Spread of Varroa Mite by Year of First Apperance <span class="citation" data-cites="varroamap">[@varroamap]</span></em></strong> Written By:sdns6mchl4. (2016, February 24). Varroa mite spread in the United States. Beesource Beekeeping Forums. https://www.beesource.com/threads/varroa-mite-spread-in-the-united-states.365462/</p>
 <p>## General Background Information</p>
 </section>
-<section id="uncapped-honey-floresvilletexas-hive" class="level3" data-number="2.0.3">
-<h3 data-number="2.0.3" class="anchored" data-anchor-id="uncapped-honey-floresvilletexas-hive"><span class="header-section-number">2.0.3</span> <strong>Uncapped Honey Floresville,Texas Hive</strong></h3>
+<section id="uncapped-honey-floresvilletexas-hive" class="level3">
+<h3 class="anchored" data-anchor-id="uncapped-honey-floresvilletexas-hive"><strong>Uncapped Honey Floresville,Texas Hive</strong></h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src=".\images/Bee Frame 2024.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </section>
-<section id="capped-honey-one-month-later-same-hive-frame--italian-bees-floresville-texas" class="level3" data-number="2.0.4">
-<h3 data-number="2.0.4" class="anchored" data-anchor-id="capped-honey-one-month-later-same-hive-frame--italian-bees-floresville-texas"><span class="header-section-number">2.0.4</span> <strong>Capped Honey one Month Later same hive frame- Italian bees Floresville, Texas</strong></h3>
+<section id="capped-honey-one-month-later-same-hive-frame--italian-bees-floresville-texas" class="level3">
+<h3 class="anchored" data-anchor-id="capped-honey-one-month-later-same-hive-frame--italian-bees-floresville-texas"><strong>Capped Honey one Month Later same hive frame- Italian bees Floresville, Texas</strong></h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src=".\images/Bee Frame Capped Honey.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </section>
-<section id="description-of-data-and-data-source" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="description-of-data-and-data-source"><span class="header-section-number">2.1</span> Description of data and data source</h2>
+<section id="description-of-data-and-data-source" class="level2">
+<h2 class="anchored" data-anchor-id="description-of-data-and-data-source">Description of data and data source</h2>
 <p>Bee colonies maintained by beekeepers are considered livestock by the USDA due to their ability to produce honey, a consumable food item, and their essential role in assisting farmers with pollination crop seasons. Given the importance of bee colonies in agriculture, it was logical to source data from the following two authoritative websites: 1. USDA National Agricultural Statistics Service (NASS): This site provides comprehensive agricultural data, including statistics on honey production and colony health. 2. Bee Informed Partnership: This site offers detailed insights and research on bee colony management and health, contributing valuable information on the status and trends of bee populations. Index Catalog // USDA Economics, Statistics and Market Information System. (n.d.-a). https://usda.library.cornell.edu/catalog?f%5Bkeywords_sim%5D%5B%5D=honey+bees&amp;locale=en<br>
 USDA - National Agricultural Statistics Service - Surveys - honey bee surveys and reports. (n.d.). https://www.nass.usda.gov/Surveys/Guide_to_NASS_Surveys/Bee_and_Honey/</p>
 </section>
-<section id="questionshypotheses-to-be-addressed" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="questionshypotheses-to-be-addressed"><span class="header-section-number">2.2</span> Questions/Hypotheses to be addressed</h2>
+<section id="questionshypotheses-to-be-addressed" class="level2">
+<h2 class="anchored" data-anchor-id="questionshypotheses-to-be-addressed">Questions/Hypotheses to be addressed</h2>
 <p>Hypothesis: “The negative impacts of mites, bacterium, and global warming have detrimental effects on honeybee colonies in the United States and Texas, which in turn will lead to a decline in honey production and negatively impact food production.” This hypothesis can be tested and validated through a visualization of outcomes using R, demonstrating the relationship between these factors and their effects on honeybee colonies.</p>
-<section id="bacterium-infection-foul-brood" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="bacterium-infection-foul-brood"><span class="header-section-number">2.2.1</span> <strong>Bacterium Infection Foul Brood</strong></h3>
+<section id="bacterium-infection-foul-brood" class="level3">
+<h3 class="anchored" data-anchor-id="bacterium-infection-foul-brood"><strong>Bacterium Infection Foul Brood</strong></h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src=".\images/American-Foul-Brood-Comb-1024x768-1.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </section>
-<section id="dead-bees-resulting-from-extreme-heat-found-in-hive" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="dead-bees-resulting-from-extreme-heat-found-in-hive"><span class="header-section-number">2.2.2</span> <strong>Dead bees resulting from extreme heat found in hive</strong></h3>
+<section id="dead-bees-resulting-from-extreme-heat-found-in-hive" class="level3">
+<h3 class="anchored" data-anchor-id="dead-bees-resulting-from-extreme-heat-found-in-hive"><strong>Dead bees resulting from extreme heat found in hive</strong></h3>
 <p><img src=".\images/dead-bees-hive-colony-collapse-600nw-2289939105.webp" class="img-fluid"></p>
 <p>#Citation section To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the bibtex file specified in the YAML header above and have the right bibtex key. Then you can include like this:</p>
 <p>Examples of reproducible research projects can for instance be found in <span class="citation" data-cites="mckay2020 mckay2020a">[@mckay2020; @mckay2020a]</span>.</p>
@@ -377,22 +371,22 @@ USDA - National Agricultural Statistics Service - Surveys - honey bee surveys an
 </section>
 </section>
 </section>
-<section id="methods" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Methods</h1>
+<section id="methods" class="level1">
+<h1>Methods</h1>
 <p><em>Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement.</em></p>
-<section id="schematic-of-workflow" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="schematic-of-workflow"><span class="header-section-number">3.1</span> Schematic of workflow</h2>
+<section id="schematic-of-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="schematic-of-workflow">Schematic of workflow</h2>
 <p>Sometimes you might want to show a schematic diagram/figure that was not created with code (if you can do it with code, do it). <strong>?@fig-schematic</strong> is an example of some - completely random/unrelated - schematic that was generated with Biorender. We store those figures in the <code>assets</code> folder.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#knitr::include_graphics(here("assets","antigen-recognition.png"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="data-aquisition" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="data-aquisition"><span class="header-section-number">3.2</span> Data aquisition</h2>
+<section id="data-aquisition" class="level2">
+<h2 class="anchored" data-anchor-id="data-aquisition">Data aquisition</h2>
 <p>We got our data from the United States Department of Agriculture (USDA).</p>
 </section>
-<section id="data-import-and-cleaning" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="data-import-and-cleaning"><span class="header-section-number">3.3</span> Data import and cleaning</h2>
+<section id="data-import-and-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-import-and-cleaning">Data import and cleaning</h2>
 <p>We decided to clean out our data from a few different datasets. We had to remove blank spaces and columns that were not pertinent to our analysis. We then filtered out other observations that did not directly deal with the data we are exploring. We are looking for cause of death to bee colonies and how they are affected by mites and climate change so we wanted to single out data that represented the losses so we can explore the different states by year and determine how the colonies were affected.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
@@ -465,8 +459,8 @@ Github\LeonelSalazar-P2-Portfolio\data' already exists</code></pre>
  $ Value     : chr  "250" "2,600" "180" "19,000" ...</code></pre>
 </div>
 </div>
-<section id="boxplot-of-value-by-year-and-data-item" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="boxplot-of-value-by-year-and-data-item"><span class="header-section-number">3.3.1</span> Boxplot of Value by Year and Data Item</h3>
+<section id="boxplot-of-value-by-year-and-data-item" class="level3">
+<h3 class="anchored" data-anchor-id="boxplot-of-value-by-year-and-data-item">Boxplot of Value by Year and Data Item</h3>
 <p>The third image is a boxplot comparing the values for “LOSS, COLONY COLLAPSE DISORDER” and “LOSS, DEADOUT” from 2015 to 2017. The boxplot provides insights into: - The central tendency and spread of losses due to both disorders. - Presence of outliers indicates that there are occasional, significantly higher losses. - Comparative analysis shows that both types of losses have varying distributions each year.</p>
 <p>This indicates that while both types of losses are present each year, the magnitude and frequency of extreme loss events can differ, suggesting variability in the factors contributing to colony losses.</p>
 <div class="cell">
@@ -509,8 +503,8 @@ Github\LeonelSalazar-P2-Portfolio\data' already exists</code></pre>
 </div>
 </div>
 </section>
-<section id="scatterplot-of-value-by-state-ansi" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="scatterplot-of-value-by-state-ansi"><span class="header-section-number">3.3.2</span> Scatterplot of Value by State ANSI</h3>
+<section id="scatterplot-of-value-by-state-ansi" class="level3">
+<h3 class="anchored" data-anchor-id="scatterplot-of-value-by-state-ansi">Scatterplot of Value by State ANSI</h3>
 <p>The fourth image is a scatterplot showing values for different states (ANSI coded) across the years 2015 to 2017. Key points include: - Each color represents a different year (2015: Red, 2016: Green, 2017: Blue). - The scatterplot reveals the distribution of values across states and highlights any trends or patterns over the three years.</p>
 <p>This scatterplot indicates that while some states experience consistently high or low values, others show significant variability year over year. This could suggest regional differences in factors affecting bee colony health.</p>
 <div class="cell">
@@ -528,8 +522,8 @@ Github\LeonelSalazar-P2-Portfolio\data' already exists</code></pre>
 </div>
 </div>
 </section>
-<section id="boxplot-of-value-by-period-and-data-item" class="level3" data-number="3.3.3">
-<h3 data-number="3.3.3" class="anchored" data-anchor-id="boxplot-of-value-by-period-and-data-item"><span class="header-section-number">3.3.3</span> Boxplot of Value by Period and Data Item</h3>
+<section id="boxplot-of-value-by-period-and-data-item" class="level3">
+<h3 class="anchored" data-anchor-id="boxplot-of-value-by-period-and-data-item">Boxplot of Value by Period and Data Item</h3>
 <p>The fifth image is a boxplot comparing the values for “LOSS, COLONY COLLAPSE DISORDER” and “LOSS, DEADOUT” across different periods of the year: - <strong>APR THRU JUN</strong> - <strong>JAN THRU MAR</strong> - <strong>JUL THRU SEP</strong> - <strong>OCT THRU DEC</strong></p>
 <p>Key insights include: - Seasonal trends in colony losses, with some periods showing higher median losses or more variability. - Outliers indicate extreme loss events occurring in specific periods.</p>
 <p>This seasonal analysis suggests that certain times of the year are more prone to higher losses, potentially due to environmental factors, resource availability, or management practices.</p>
@@ -559,14 +553,14 @@ Github\LeonelSalazar-P2-Portfolio\data' already exists</code></pre>
 </div>
 </div>
 </section>
-<section id="boxplot-of-value-by-period-and-data-item-1" class="level3" data-number="3.3.4">
-<h3 data-number="3.3.4" class="anchored" data-anchor-id="boxplot-of-value-by-period-and-data-item-1"><span class="header-section-number">3.3.4</span> Boxplot of Value by Period and Data Item</h3>
+<section id="boxplot-of-value-by-period-and-data-item-1" class="level3">
+<h3 class="anchored" data-anchor-id="boxplot-of-value-by-period-and-data-item-1">Boxplot of Value by Period and Data Item</h3>
 <p>The fifth image is a boxplot comparing the values for “LOSS, COLONY COLLAPSE DISORDER” and “LOSS, DEADOUT” across different periods of the year: - <strong>APR THRU JUN</strong> - <strong>JAN THRU MAR</strong> - <strong>JUL THRU SEP</strong> - <strong>OCT THRU DEC</strong></p>
 <p>Key insights include: - Seasonal trends in colony losses, with some periods showing higher median losses or more variability. - Outliers indicate extreme loss events occurring in specific periods.</p>
 <p>This seasonal analysis suggests that certain times of the year are more prone to higher losses, potentially due to environmental factors, resource availability, or management practices.</p>
 </section>
-<section id="overall-analysis" class="level3" data-number="3.3.5">
-<h3 data-number="3.3.5" class="anchored" data-anchor-id="overall-analysis"><span class="header-section-number">3.3.5</span> Overall Analysis</h3>
+<section id="overall-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="overall-analysis">Overall Analysis</h3>
 <ul>
 <li>The composition of honey indicates its high sugar content, essential for energy but also highlighting the presence of beneficial components like enzymes and vitamins.</li>
 <li>The spread of Varroa mites map highlights the widespread and growing impact of these pests over time, emphasizing the need for ongoing management and control efforts.</li>
@@ -574,16 +568,16 @@ Github\LeonelSalazar-P2-Portfolio\data' already exists</code></pre>
 </ul>
 <p>These visualizations collectively provide a comprehensive overview of the challenges faced by bee colonies, from composition and health to external threats like Varroa mites and seasonal variations in losses.</p>
 </section>
-<section id="varroa-mite-exposed" class="level3" data-number="3.3.6">
-<h3 data-number="3.3.6" class="anchored" data-anchor-id="varroa-mite-exposed"><span class="header-section-number">3.3.6</span> <strong>VARROA MITE EXPOSED</strong></h3>
+<section id="varroa-mite-exposed" class="level3">
+<h3 class="anchored" data-anchor-id="varroa-mite-exposed"><strong>VARROA MITE EXPOSED</strong></h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src=".\images/_20220406_on_varroadestructor_minden_00463080.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </section>
-<section id="varroa-mite" class="level3" data-number="3.3.7">
-<h3 data-number="3.3.7" class="anchored" data-anchor-id="varroa-mite"><span class="header-section-number">3.3.7</span> <strong>VARROA MITE</strong></h3>
+<section id="varroa-mite" class="level3">
+<h3 class="anchored" data-anchor-id="varroa-mite"><strong>VARROA MITE</strong></h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src=".\images/Varrpa 1.webp" class="img-fluid quarto-figure quarto-figure-center figure-img" width="527"></p>
@@ -1025,16 +1019,16 @@ Number of Support Vectors:  10</code></pre>
 </div>
 </div>
 </section>
-<section id="honey-bee-collecting-pollen" class="level3" data-number="3.3.8">
-<h3 data-number="3.3.8" class="anchored" data-anchor-id="honey-bee-collecting-pollen"><span class="header-section-number">3.3.8</span> <strong>Honey Bee Collecting Pollen</strong></h3>
+<section id="honey-bee-collecting-pollen" class="level3">
+<h3 class="anchored" data-anchor-id="honey-bee-collecting-pollen"><strong>Honey Bee Collecting Pollen</strong></h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src=".\images/Bee Feeding.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </section>
-<section id="honey-bee-with-exposed-bloated-varroa-mite" class="level3" data-number="3.3.9">
-<h3 data-number="3.3.9" class="anchored" data-anchor-id="honey-bee-with-exposed-bloated-varroa-mite"><span class="header-section-number">3.3.9</span> Honey Bee with exposed bloated Varroa Mite</h3>
+<section id="honey-bee-with-exposed-bloated-varroa-mite" class="level3">
+<h3 class="anchored" data-anchor-id="honey-bee-with-exposed-bloated-varroa-mite">Honey Bee with exposed bloated Varroa Mite</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/varroa-mite-bee.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
@@ -1054,14 +1048,14 @@ Number of Support Vectors:  10</code></pre>
 </div>
 </section>
 </section>
-<section id="full-analysis" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="full-analysis"><span class="header-section-number">3.4</span> Full analysis</h2>
+<section id="full-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="full-analysis">Full analysis</h2>
 <p>##The full analysis is still pending###</p>
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="references" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> References</h1>
+<section id="references" class="level1">
+<h1>References</h1>
 
 
 </section>
