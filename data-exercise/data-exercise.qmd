@@ -1,6 +1,5 @@
 ---
 title: "Data Exercise"
-author: "Leonel Salazar, IGE436"
 ---
 
 # I am not 100% done, i still need to add comments and analysis for the models. I will plan on doing this by the end of the 4th of july weekend. 
