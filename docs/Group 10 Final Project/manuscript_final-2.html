@@ -100,6 +100,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="../site_libs/viz-1.8.2/viz.js"></script>
+
+<link href="../site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+
+<script src="../site_libs/grViz-binding-1.0.11/grViz.js"></script>
+
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -1052,6 +1060,47 @@ Number of Support Vectors:  10</code></pre>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install necessary packages</span></span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("DiagrammeR")</span></span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the DiagrammeR package</span></span>
+<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DiagrammeR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'DiagrammeR' was built under R version 4.3.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the flowchart using DiagrammeR</span></span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grViz</span>(<span class="st">"</span></span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="st">  digraph Data_Analysis_Flowchart {</span></span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a><span class="st">    graph [layout = dot, rankdir = TB]</span></span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a><span class="st">    node [shape = box, style = filled, color = lightblue]</span></span>
+<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
+<span id="cb96-8"><a href="#cb96-8" aria-hidden="true" tabindex="-1"></a><span class="st">    Define_Objectives [label = 'Define Objectives']</span></span>
+<span id="cb96-9"><a href="#cb96-9" aria-hidden="true" tabindex="-1"></a><span class="st">    Collect_Data [label = 'Collect Data']</span></span>
+<span id="cb96-10"><a href="#cb96-10" aria-hidden="true" tabindex="-1"></a><span class="st">    Clean_Data [label = 'Clean Data']</span></span>
+<span id="cb96-11"><a href="#cb96-11" aria-hidden="true" tabindex="-1"></a><span class="st">    Analyze_Data [label = 'Analyze Data']</span></span>
+<span id="cb96-12"><a href="#cb96-12" aria-hidden="true" tabindex="-1"></a><span class="st">    Interpret_Results [label = 'Interpret Results']</span></span>
+<span id="cb96-13"><a href="#cb96-13" aria-hidden="true" tabindex="-1"></a><span class="st">    Visualize_Data [label = 'Visualize Data']</span></span>
+<span id="cb96-14"><a href="#cb96-14" aria-hidden="true" tabindex="-1"></a><span class="st">    Compile_Report [label = 'Compile Report']</span></span>
+<span id="cb96-15"><a href="#cb96-15" aria-hidden="true" tabindex="-1"></a><span class="st">    Review_Revise [label = 'Review &amp; Revise']</span></span>
+<span id="cb96-16"><a href="#cb96-16" aria-hidden="true" tabindex="-1"></a><span class="st">    Present_Report [label = 'Present Report']</span></span>
+<span id="cb96-17"><a href="#cb96-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-18"><a href="#cb96-18" aria-hidden="true" tabindex="-1"></a><span class="st">    Define_Objectives -&gt; Collect_Data</span></span>
+<span id="cb96-19"><a href="#cb96-19" aria-hidden="true" tabindex="-1"></a><span class="st">    Collect_Data -&gt; Clean_Data</span></span>
+<span id="cb96-20"><a href="#cb96-20" aria-hidden="true" tabindex="-1"></a><span class="st">    Clean_Data -&gt; Analyze_Data</span></span>
+<span id="cb96-21"><a href="#cb96-21" aria-hidden="true" tabindex="-1"></a><span class="st">    Analyze_Data -&gt; Interpret_Results</span></span>
+<span id="cb96-22"><a href="#cb96-22" aria-hidden="true" tabindex="-1"></a><span class="st">    Interpret_Results -&gt; Visualize_Data</span></span>
+<span id="cb96-23"><a href="#cb96-23" aria-hidden="true" tabindex="-1"></a><span class="st">    Visualize_Data -&gt; Compile_Report</span></span>
+<span id="cb96-24"><a href="#cb96-24" aria-hidden="true" tabindex="-1"></a><span class="st">    Compile_Report -&gt; Review_Revise</span></span>
+<span id="cb96-25"><a href="#cb96-25" aria-hidden="true" tabindex="-1"></a><span class="st">    Review_Revise -&gt; Present_Report</span></span>
+<span id="cb96-26"><a href="#cb96-26" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb96-27"><a href="#cb96-27" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-cc7e034efb2abc8793b1" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-cc7e034efb2abc8793b1">{"x":{"diagram":"\n  digraph Data_Analysis_Flowchart {\n    graph [layout = dot, rankdir = TB]\n\n    node [shape = box, style = filled, color = lightblue]\n    \n    Define_Objectives [label = \"Define Objectives\"]\n    Collect_Data [label = \"Collect Data\"]\n    Clean_Data [label = \"Clean Data\"]\n    Analyze_Data [label = \"Analyze Data\"]\n    Interpret_Results [label = \"Interpret Results\"]\n    Visualize_Data [label = \"Visualize Data\"]\n    Compile_Report [label = \"Compile Report\"]\n    Review_Revise [label = \"Review & Revise\"]\n    Present_Report [label = \"Present Report\"]\n\n    Define_Objectives -> Collect_Data\n    Collect_Data -> Clean_Data\n    Clean_Data -> Analyze_Data\n    Analyze_Data -> Interpret_Results\n    Interpret_Results -> Visualize_Data\n    Visualize_Data -> Compile_Report\n    Compile_Report -> Review_Revise\n    Review_Revise -> Present_Report\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
 
 
 </section>
