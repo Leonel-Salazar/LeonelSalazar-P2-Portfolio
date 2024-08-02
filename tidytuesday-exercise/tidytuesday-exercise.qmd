@@ -1,5 +1,323 @@
 ---
-title: "Tidy Tuesday Exercise"
+title: "tidytuesday-exercise"
+
 ---
 
-Placeholder file for the future Tidy Tuesday exercise.
+
+```{r}
+# Load necessary libraries
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(here)
+library(caret)  # For machine learning models
+library(rpart)  # For decision trees
+library(randomForest)  # For random forest
+library(gbm)  # For gradient boosting
+library(e1071)  # For SVM
+```
+
+```{r}
+
+
+# Correctly removed first row and replaced with correct labels or variable names
+Data <- read.csv("C:/Users/Leonel/Desktop/MSDA/MS Data Analytics/Current Class/DA 6833/Practicum 2 Github/leonelsalazar-P2-portfolio/tidytuesday-exercise/finalists.csv", header = TRUE, na.strings = "?",
+stringsAsFactors = TRUE)
+```
+
+
+```{r}
+# Display the structure of the dataset
+str(Data)
+
+```
+
+```{r}
+# View the data
+view(Data)
+
+
+```
+
+```{r}
+# Select all columns except 4 and 5
+contestants_data <- dplyr::select(Data, -c(4,5))
+
+```
+
+```{r}
+# Convert Birthday to date format and reformat
+contestants_data <- contestants_data %>%
+   mutate(Birthday = as.Date(Birthday, format = "%d-%b-%y")) %>%
+   mutate(Birthday = format(Birthday, "%d-%m-%y"))
+
+```
+
+
+```{r}
+# View the transformed data
+view(contestants_data)
+
+```
+
+
+```{r}
+# Display the structure of the transformed data
+str(contestants_data)
+
+```
+
+```{r}
+
+# Clean the Contestant column
+contestants_data$Contestant <- as.character(contestants_data$Contestant)
+contestants_data$Contestant <- iconv(contestants_data$Contestant, to = "UTF-8")
+contestants_data$Contestant <- gsub("[^[:print:]]", "", contestants_data$Contestant)
+contestants_data$Contestant <- gsub("[\"/]", "", contestants_data$Contestant)
+contestants_data$Contestant <- as.factor(contestants_data$Contestant)
+contestants_data$Birthday <- as.factor(contestants_data$Birthday)
+
+# Remove rows with NA values in Contestant, Birthday, and Season columns
+contestants_data_clean <- contestants_data %>%
+  drop_na(Contestant, Birthday, Season)
+
+```
+
+
+```{r}
+
+# Display the structure of the cleaned data
+str(contestants_data_clean)
+
+```
+
+
+```{r}
+# View the cleaned data
+view(contestants_data_clean)
+
+```
+
+
+```{r}
+
+# Remove rows with NA values in Birthplace
+contestants_data_clean <- contestants_data_clean %>%
+  drop_na(Birthplace)
+
+
+```
+
+```{r}
+
+
+# View the cleaned data
+view(contestants_data_clean)
+
+```
+
+
+```{r}
+# Save the cleaned data to a CSV file
+write.csv(contestants_data_clean, "C:/Users/Leonel/Desktop/MSDA/MS Data Analytics/Current Class/DA 6833/Practicum 2 Github/leonelsalazar-P2-portfolio/tidytuesday-exercise/contestants_data_clean.csv", row.names = FALSE)
+
+```
+
+
+```{r}
+# Load ggplot2 for plotting
+library(ggplot2)
+
+# Convert Contestant to numeric for plotting
+contestants_data_clean$Contestant <- as.numeric(contestants_data_clean$Contestant)
+
+# Create histogram of Contestant numbers
+ggplot(contestants_data_clean, aes(x = Contestant)) +
+  geom_histogram(bins = 20, fill = "steelblue", color = "black") +
+  labs(title = "Distribution of Contestants",
+       x = "Contestant (Numeric Representation)",
+       y = "Count") +
+  theme_minimal()
+
+```
+
+
+
+
+```{r}
+# Add numeric representation of Contestant
+contestants_data_clean$Contestant_Num <- as.numeric(contestants_data_clean$Contestant)
+
+# Create box plot of Contestants by Season
+ggplot(contestants_data_clean, aes(x = factor(Season), y = Contestant_Num)) +
+  geom_boxplot(fill = "lightblue", color = "black") +
+  labs(title = "Box Plot of Contestants by Season",
+       x = "Season",
+       y = "Contestant (Numeric Representation)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+
+
+```{r}
+
+# Split the data into training and testing sets
+set.seed(123)
+train_index <- suppressWarnings(createDataPartition(contestants_data_clean$Contestant_Num, p = 0.8, list = FALSE))
+train_data <- contestants_data_clean[train_index, ]
+test_data <- contestants_data_clean[-train_index, ]
+
+# Linear Regression
+lm_model <- suppressWarnings(train(Contestant_Num ~ ., data = train_data, method = "lm"))
+lm_pred <- suppressWarnings(predict(lm_model, test_data))
+lm_rmse <- RMSE(lm_pred, test_data$Contestant_Num)
+
+# Decision Tree
+tree_model <- suppressWarnings(train(Contestant_Num ~ ., data = train_data, method = "rpart"))
+tree_pred <- suppressWarnings(predict(tree_model, test_data))
+tree_rmse <- RMSE(tree_pred, test_data$Contestant_Num)
+
+# Random Forest
+rf_model <- suppressWarnings(train(Contestant_Num ~ ., data = train_data, method = "rf"))
+rf_pred <- suppressWarnings(predict(rf_model, test_data))
+rf_rmse <- RMSE(rf_pred, test_data$Contestant_Num)
+
+# Gradient Boosting
+gbm_model <- suppressWarnings(train(Contestant_Num ~ ., data = train_data, method = "gbm", verbose = FALSE))
+gbm_pred <- suppressWarnings(predict(gbm_model, test_data))
+gbm_rmse <- RMSE(gbm_pred, test_data$Contestant_Num)
+
+# Support Vector Machine
+svm_model <- suppressWarnings(train(Contestant_Num ~ ., data = train_data, method = "svmRadial"))
+svm_pred <- suppressWarnings(predict(svm_model, test_data))
+svm_rmse <- RMSE(svm_pred, test_data$Contestant_Num)
+
+# Combine RMSE results into a dataframe for comparison
+results <- suppressWarnings(data.frame(
+  Model = c("Linear Regression", "Decision Tree", "Random Forest", "Gradient Boosting", "Support Vector Machine"),
+  RMSE = c(lm_rmse, tree_rmse, rf_rmse, gbm_rmse, svm_rmse)
+))
+
+print(results)
+
+
+```
+
+
+
+
+
+
+
+| Model                     | RMSE       |
+|---------------------------|------------|
+| Linear Regression         | 0.000000   |
+| Decision Tree             | 23.2707546 |
+| Random Forest             | 0.8732771  |
+| Gradient Boosting         | 3.2988005  |
+| Support Vector Machine    | 42.7373149 |
+
+### Analysis
+
+1. **Linear Regression**:
+   - **RMSE: 0.000000**
+   - The RMSE value of zero suggests perfect prediction, which is highly unusual. This might indicate an issue with the model or the way it was applied. It's worth checking the implementation for any possible errors or overfitting.
+
+2. **Decision Tree**:
+   - **RMSE: 23.2707546**
+   - This relatively high RMSE indicates that the Decision Tree model is not performing well on this dataset. Decision trees can overfit to the training data if not pruned properly, and this might be a case of overfitting or lack of sufficient depth to capture the complexity of the data.
+
+3. **Random Forest**:
+   - **RMSE: 0.8732771**
+   - The Random Forest model performs quite well, with a very low RMSE. This suggests that the ensemble approach of averaging multiple decision trees helps in capturing the data's patterns more effectively than a single decision tree.
+
+4. **Gradient Boosting**:
+   - **RMSE: 3.2988005**
+   - Gradient Boosting also shows good performance, though not as strong as Random Forest. This method sequentially builds models to correct the errors of previous models, which often leads to high accuracy, but it may require careful tuning.
+
+5. **Support Vector Machine (SVM)**:
+   - **RMSE: 42.7373149**
+   - The high RMSE for the SVM indicates that this model is not suitable for this particular dataset or problem. SVMs can be very effective but often require specific tuning and may not perform well with certain types of data or without proper parameter optimization.
+
+### Conclusion
+
+- **Best Performing Model**: The **Random Forest** model is the best performing among the ones compared, with an RMSE of 0.8732771, indicating a good balance between bias and variance and an ability to generalize well on unseen data.
+- **Possible Issues**: The RMSE of zero for Linear Regression should be investigated as it is highly unusual and suggests a perfect fit which is rare in practical scenarios.
+- **Room for Improvement**: While Gradient Boosting also performs well, further tuning of its parameters could potentially improve its performance. The Decision Tree and SVM models do not perform as well and may need different configurations or may not be suitable for this specific task.
+
+The next steps could involve:
+1. Investigating the Linear Regression model for any anomalies.
+2. Fine-tuning the Random Forest and Gradient Boosting models further.
+3. Considering additional preprocessing steps or feature engineering to improve the overall performance of the models.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

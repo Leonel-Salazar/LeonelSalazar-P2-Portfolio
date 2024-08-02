@@ -1,0 +1,132 @@
+---
+title: "Tidy Tuesday Exercise"
+---
+
+Placeholder file for the future Tidy Tuesday exercise.
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(here)
+```
+
+```{r}
+#correctly removed first row and replaced with correct labels or variable names
+Data <- read.csv("C:/Users/Leonel/Desktop/MSDA/MS Data Analytics/Current Class/DA 6833/Practicum 2 Github/leonelsalazar-P2-portfolio/tidytuesday-exercise/finalists.csv", header = T, na.strings = "?",
+stringsAsFactors = T)
+```
+
+```{r}
+str(Data)
+```
+
+```{r}
+view(Data)
+```
+
+
+```{r}
+# Select all columns except 4
+contestants_data <- dplyr::select(Data, -c(4,5))
+```
+
+```{r}
+contestants_data <- contestants_data %>%
+   mutate(Birthday = as.Date(Birthday, format = "%d-%b-%y")) %>%
+   mutate(Birthday = format(Birthday, "%d-%m-%y"))
+```
+
+
+```{r}
+view(contestants_data)
+```
+
+```{r}
+str(contestants_data)
+```
+
+```{r}
+# Convert Contestant to character to clean it
+contestants_data$Contestant <- as.character(contestants_data$Contestant)
+
+# Convert Contestant column to UTF-8 encoding to handle encoding issues
+contestants_data$Contestant <- iconv(contestants_data$Contestant, to = "UTF-8")
+
+# Remove non-printable characters and unwanted symbols
+contestants_data$Contestant <- gsub("[^[:print:]]", "", contestants_data$Contestant)
+
+# Remove specific unwanted characters (e.g., quotes and slashes) if needed
+contestants_data$Contestant <- gsub("[\"/]", "", contestants_data$Contestant)
+
+# Convert Contestant back to factor
+contestants_data$Contestant <- as.factor(contestants_data$Contestant)
+
+# Ensure Birthday is treated as a factor (if needed)
+contestants_data$Birthday <- as.factor(contestants_data$Birthday)
+
+# Remove rows with NA values in Contestant, Birthday, and Season columns (if needed)
+contestants_data_clean <- contestants_data %>%
+  drop_na(Contestant, Birthday, Season)
+```
+
+```{r}
+str(contestants_data_clean)
+```
+```{r}
+#contestants_data_clean$Contestant <- as.numeric(contestants_data_clean$Contestant)
+```
+
+```{r}
+view(contestants_data_clean)
+```
+
+```{r}
+contestants_data_clean <- contestants_data_clean %>%
+  drop_na(Birthplace)
+
+```
+
+```{r}
+View(contestants_data_clean)
+```
+
+
+```{r}
+write.csv(contestants_data_clean, "C:/Users/Leonel/Desktop/MSDA/MS Data Analytics/Current Class/DA 6833/Practicum 2 Github/leonelsalazar-P2-portfolio/tidytuesday-exercise/contestants_data_clean.csv", row.names = FALSE)
+```
+
+```{r}
+library(ggplot2)
+
+# Convert Contestant to numeric (just for plotting)
+contestants_data_clean$Contestant <- as.numeric(contestants_data_clean$Contestant)
+
+# Create histogram of Contestant numbers
+ggplot(contestants_data_clean, aes(x = Contestant)) +
+  geom_histogram(bins = 20, fill = "steelblue", color = "black") +
+  labs(title = "Distribution of Contestants",
+       x = "Contestant (Numeric Representation)",
+       y = "Count") +
+  theme_minimal()
+```
+
+```{r}
+contestants_data_clean$Contestant_Num <- as.numeric(contestants_data_clean$Contestant)
+
+
+ggplot(contestants_data_clean, aes(x = factor(Season), y = Contestant_Num)) +
+  geom_boxplot(fill = "lightblue", color = "black") +
+  labs(title = "Box Plot of Contestants by Season",
+       x = "Season",
+       y = "Contestant (Numeric Representation)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+
+

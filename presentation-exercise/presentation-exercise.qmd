@@ -3,3 +3,81 @@ title: "Presentation Exercise"
 ---
 
 Placeholder file for the future data/results presentation exercise.
+
+# load libraries
+
+
+```{r}
+
+library(ggplot2)
+library(tidyverse)
+library(here)
+library(plotly)
+library(flextable)
+
+
+
+```
+
+
+# Import data
+
+```{r}
+
+data <- read.csv("piedata.csv", header = TRUE, sep = ",")
+
+
+data$Category <- as.factor(data$Category)
+data$Value <- as.numeric(data$Value)
+
+
+
+str(data)
+
+```
+
+
+# Create the Graph
+
+```{r}
+
+blue_palette <- scales::brewer_pal(palette = "Blues")(4)
+
+
+ggplot(data, aes(x = "", y = Value, fill = Category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_void() +
+  scale_fill_manual(values = blue_palette) +  # Use the blue color palette
+  labs(title = "RESIDENCES ARE THE LEADING LOCATION OF GUN THEFTS FROM CARS") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, margin = margin(b = 20)))  # Center title and adjust bottom margin
+
+
+```
+
+
+
+
+```{r}
+set_flextable_defaults(
+  font.color = "black",
+  border.color = "lightblue",
+  theme_fun = "theme_box")
+
+dat <- data.frame(
+  Category = c("Other", "Parking Lot", "Residence", "Road"),
+  Value = c(12, 32, 36, 20 ) 
+  
+)
+flextable(dat)
+
+```
+
+```{r}
+
+init_flextable_defaults()
+flextable(dat)
+```
+
+
