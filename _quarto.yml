@@ -26,8 +26,8 @@ website:
 
 format:
   html:
-    theme: morph
-    highlight: zenburn
+    theme: united
+    highlight: tango
     css: styles.css
     toc: FALSE
 

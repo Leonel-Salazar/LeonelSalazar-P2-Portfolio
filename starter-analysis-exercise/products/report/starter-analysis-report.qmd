@@ -1,15 +1,6 @@
 ---
-title: "Manuscript/Report Template for a Data Analysis Project"
-subtitle: ""
-author: Your Name
-date: today
-format:
-  html:
-    toc: false
-    number-sections: true
-    highlight-style: github
-bibliography: ../dataanalysis-template-references.bib
-csl: ../apa.csl
+title: "Manuscript"
+
 ---
 
 The structure below is one possible setup for a data analysis project (including the course project). For a manuscript, adjust as needed. 
