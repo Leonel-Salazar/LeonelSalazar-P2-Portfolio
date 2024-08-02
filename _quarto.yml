@@ -10,8 +10,10 @@ website:
         file: aboutme.qmd
       - text: "Projects"
         menu:
+          - text: "Group 10 Final Project"
+            file: Group 10 Final Project/manuscript_final-2.qmd
           - text: "Starter Analysis Exercise"
-            file: starter-analysis-exercise/products/report/starter-analysis-report.qmd
+            file: starter-analysis-exercise/products/report/manuscript_final-2.qmd
           - text: "R Coding Exercise"
             file: coding-exercise/coding-exercise.qmd
           - text: "Presentation Exercise"
