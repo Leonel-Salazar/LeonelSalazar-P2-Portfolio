@@ -732,6 +732,8 @@ write.csv(data_hcny_clean, here("hcnydata_cleaned.csv"), row.names = FALSE)
 #write.csv(hcnydata_cleaned, "C:/Users/ecruz/OneDrive/Documents/UTSA - Data Science Program/Semester Classes/Practicum II Repository/P2-Practicum-II-Portfolio-EdwardCruz/hcny_CleanDraft.csv", row.names = FALSE)
 ```
 
+
+
 ## Full analysis
 
 ##The full analysis is still pending###
@@ -739,3 +741,40 @@ write.csv(data_hcny_clean, here("hcnydata_cleaned.csv"), row.names = FALSE)
 {{< pagebreak >}}
 
 # References
+
+
+```{r}
+# Install necessary packages
+install.packages("DiagrammeR")
+
+# Load the DiagrammeR package
+library(DiagrammeR)
+
+# Create the flowchart using DiagrammeR
+grViz("
+  digraph Data_Analysis_Flowchart {
+    graph [layout = dot, rankdir = TB]
+
+    node [shape = box, style = filled, color = lightblue]
+    
+    Define_Objectives [label = 'Define Objectives']
+    Collect_Data [label = 'Collect Data']
+    Clean_Data [label = 'Clean Data']
+    Analyze_Data [label = 'Analyze Data']
+    Interpret_Results [label = 'Interpret Results']
+    Visualize_Data [label = 'Visualize Data']
+    Compile_Report [label = 'Compile Report']
+    Review_Revise [label = 'Review & Revise']
+    Present_Report [label = 'Present Report']
+
+    Define_Objectives -> Collect_Data
+    Collect_Data -> Clean_Data
+    Clean_Data -> Analyze_Data
+    Analyze_Data -> Interpret_Results
+    Interpret_Results -> Visualize_Data
+    Visualize_Data -> Compile_Report
+    Compile_Report -> Review_Revise
+    Review_Revise -> Present_Report
+  }
+")
+```
