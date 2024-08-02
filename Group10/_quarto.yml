@@ -1,0 +1,37 @@
+project: 
+  type: website
+  output-dir: docs
+
+website:
+  title: "Leonel Salazar  Data Analysis Portfolio"
+  navbar:
+    left:
+      - text: "About Me"
+        file: aboutme.qmd
+      - text: "Projects"
+        menu:
+          - text: "Group10 Analysis Exercise"
+            file: starter-analysis-exercise/products/report/manuscript_final-2.qmd
+          - text: "R Coding Exercise"
+            file: coding-exercise/coding-exercise.qmd
+          - text: "Data Exercise"
+            file: data-exercise/data-exercise.qmd
+          - text: "CDC Data Exercise"
+            file: cdcdata-exercise/cdcdata-exercise.qmd  
+          - text: "Presentation Exercise"
+            file: presentation-exercise/presentation-exercise.qmd
+          - text: "Tidy Tuesday Exercise"
+            file: tidytuesday-exercise/tidytuesday-exercise.qmd
+          
+    right:
+      - icon: github 
+        href: https://github.com/Leonel-Salazar/leonelsalazar-P2-portfolio     
+
+format:
+  html:
+    theme: Zephyr
+    highlight: zenburn
+    css: styles.css
+    toc: FALSE
+
+
