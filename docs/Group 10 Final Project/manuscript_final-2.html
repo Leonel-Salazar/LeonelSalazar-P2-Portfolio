@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -366,8 +400,8 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="schematic-of-workflow">Schematic of workflow</h2>
 <div class="cell">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-6836fb582d3bb3bee829" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-6836fb582d3bb3bee829">{"x":{"diagram":"\ndigraph G {\n\n  node [shape = box, style = filled, color = lightblue, fontname = Helvetica]\n\n  subgraph cluster_0 {\n    label = \"Analytical Report Workflow\"\n    \n    Introduction -> Data_Acquisition -> Data_Cleaning_Preparation -> Exploratory_Data_Analysis -> Data_Visualization -> Advanced_Statistical_Analysis -> Results_Discussion -> Conclusion -> Appendix -> References\n  }\n\n  Introduction [label = \"1. Introduction\"]\n  Data_Acquisition [label = \"2. Data Acquisition\"]\n  Data_Cleaning_Preparation [label = \"3. Data Cleaning and Preparation\"]\n  Exploratory_Data_Analysis [label = \"4. Exploratory Data Analysis (EDA)\"]\n  Data_Visualization [label = \"5. Data Visualization\"]\n  Advanced_Statistical_Analysis [label = \"6. Advanced Statistical Analysis\"]\n  Results_Discussion [label = \"7. Results and Discussion\"]\n  Conclusion [label = \"8. Conclusion\"]\n  Appendix [label = \"9. Appendix\"]\n  References [label = \"10. References\"]\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-32eaf447176dfa1756dd" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-32eaf447176dfa1756dd">{"x":{"diagram":"\ndigraph G {\n\n  node [shape = box, style = filled, color = lightblue, fontname = Helvetica]\n\n  subgraph cluster_0 {\n    label = \"Analytical Report Workflow\"\n    \n    Introduction -> Data_Acquisition -> Data_Cleaning_Preparation -> Exploratory_Data_Analysis -> Data_Visualization -> Advanced_Statistical_Analysis -> Results_Discussion -> Conclusion -> Appendix -> References\n  }\n\n  Introduction [label = \"1. Introduction\"]\n  Data_Acquisition [label = \"2. Data Acquisition\"]\n  Data_Cleaning_Preparation [label = \"3. Data Cleaning and Preparation\"]\n  Exploratory_Data_Analysis [label = \"4. Exploratory Data Analysis (EDA)\"]\n  Data_Visualization [label = \"5. Data Visualization\"]\n  Advanced_Statistical_Analysis [label = \"6. Advanced Statistical Analysis\"]\n  Results_Discussion [label = \"7. Results and Discussion\"]\n  Conclusion [label = \"8. Conclusion\"]\n  Appendix [label = \"9. Appendix\"]\n  References [label = \"10. References\"]\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -732,6 +766,45 @@ Number of Support Vectors:  10</code></pre>
 <figure class="figure">
 <p><img src="images/varroa-mite-bee.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install necessary packages</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"DiagrammeR"</span>)) <span class="fu">install.packages</span>(<span class="st">"DiagrammeR"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the DiagrammeR package</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DiagrammeR)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the flowchart using DiagrammeR</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grViz</span>(<span class="st">"</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="st">  digraph Data_Analysis_Flowchart {</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="st">    graph [layout = dot, rankdir = LR, label = 'Workflow Schematic', fontsize = 45, labelloc = 't']</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="st">    node [style = filled, fontsize = 30, width = 2, height = 2]</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="st">    Define_Objectives [label = 'Define Objectives', shape = oval, color = lightblue]</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="st">    Collect_Data [label = 'Collect Data', shape = box, color = lightgrey]</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="st">    Clean_Data [label = 'Clean Data', shape = ellipse, color = lightyellow]</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="st">    Analyze_Data [label = 'Analyze Data', shape = diamond, color = lightcoral]</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="st">    Interpret_Results [label = 'Interpret Results', shape = trapezium, color = lightgrey]</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="st">    Visualize_Data [label = 'Visualize Data', shape = parallelogram, color = lightpink]</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="st">    Compile_Report [label = 'Compile Report', shape = house, color = lightcyan]</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="st">    Review_Revise [label = 'Review &amp; Revise', shape = invhouse, color = lightgoldenrodyellow]</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="st">    Present_Report [label = 'Present Report', shape = hexagon, color = lightseagreen]</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="st">    Define_Objectives -&gt; Collect_Data</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="st">    Collect_Data -&gt; Clean_Data</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="st">    Clean_Data -&gt; Analyze_Data</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="st">    Analyze_Data -&gt; Interpret_Results</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="st">    Interpret_Results -&gt; Visualize_Data</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="st">    Visualize_Data -&gt; Compile_Report</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="st">    Compile_Report -&gt; Review_Revise</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="st">    Review_Revise -&gt; Present_Report</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-e4c1a00613dc4fbc68cd" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-e4c1a00613dc4fbc68cd">{"x":{"diagram":"\n  digraph Data_Analysis_Flowchart {\n    graph [layout = dot, rankdir = LR, label = \"Workflow Schematic\", fontsize = 45, labelloc = \"t\"]\n\n    node [style = filled, fontsize = 30, width = 2, height = 2]\n\n    Define_Objectives [label = \"Define Objectives\", shape = oval, color = lightblue]\n    Collect_Data [label = \"Collect Data\", shape = box, color = lightgrey]\n    Clean_Data [label = \"Clean Data\", shape = ellipse, color = lightyellow]\n    Analyze_Data [label = \"Analyze Data\", shape = diamond, color = lightcoral]\n    Interpret_Results [label = \"Interpret Results\", shape = trapezium, color = lightgrey]\n    Visualize_Data [label = \"Visualize Data\", shape = parallelogram, color = lightpink]\n    Compile_Report [label = \"Compile Report\", shape = house, color = lightcyan]\n    Review_Revise [label = \"Review & Revise\", shape = invhouse, color = lightgoldenrodyellow]\n    Present_Report [label = \"Present Report\", shape = hexagon, color = lightseagreen]\n\n    Define_Objectives -> Collect_Data\n    Collect_Data -> Clean_Data\n    Clean_Data -> Analyze_Data\n    Analyze_Data -> Interpret_Results\n    Interpret_Results -> Visualize_Data\n    Visualize_Data -> Compile_Report\n    Compile_Report -> Review_Revise\n    Review_Revise -> Present_Report\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
 </div>
 
 

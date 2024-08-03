@@ -831,4 +831,38 @@ write.csv(data_hcny_clean, here("hcnydata_cleaned.csv"), row.names = FALSE)
 
 
 
+```{r}
+# Install necessary packages
+if (!require("DiagrammeR")) install.packages("DiagrammeR")
 
+# Load the DiagrammeR package
+library(DiagrammeR)
+
+# Create the flowchart using DiagrammeR
+grViz("
+  digraph Data_Analysis_Flowchart {
+    graph [layout = dot, rankdir = LR, label = 'Workflow Schematic', fontsize = 45, labelloc = 't']
+
+    node [style = filled, fontsize = 30, width = 2, height = 2]
+
+    Define_Objectives [label = 'Define Objectives', shape = oval, color = lightblue]
+    Collect_Data [label = 'Collect Data', shape = box, color = lightgrey]
+    Clean_Data [label = 'Clean Data', shape = ellipse, color = lightyellow]
+    Analyze_Data [label = 'Analyze Data', shape = diamond, color = lightcoral]
+    Interpret_Results [label = 'Interpret Results', shape = trapezium, color = lightgrey]
+    Visualize_Data [label = 'Visualize Data', shape = parallelogram, color = lightpink]
+    Compile_Report [label = 'Compile Report', shape = house, color = lightcyan]
+    Review_Revise [label = 'Review & Revise', shape = invhouse, color = lightgoldenrodyellow]
+    Present_Report [label = 'Present Report', shape = hexagon, color = lightseagreen]
+
+    Define_Objectives -> Collect_Data
+    Collect_Data -> Clean_Data
+    Clean_Data -> Analyze_Data
+    Analyze_Data -> Interpret_Results
+    Interpret_Results -> Visualize_Data
+    Visualize_Data -> Compile_Report
+    Compile_Report -> Review_Revise
+    Review_Revise -> Present_Report
+  }
+")
+```
