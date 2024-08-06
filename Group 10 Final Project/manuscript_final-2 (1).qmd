@@ -1,10 +1,19 @@
 ---
-title: "Group 10 Final Project"
-output: html_document
+title: "Honey Bee Colonies Impacted by Varroa, American Foulbrood and Global Warming"
+subtitle: ""
+author: Edward Cruz, Jr., Leonel G. Salazar, Amelia Tristan, Mojisola Popoola
+date: today
+format:
+  html:
+    toc: false
+    number-sections: true
+    highlight-style: github
+bibliography: ../citations.bib 
+csl: ../apa.csl
+editor: 
+  markdown: 
+    wrap: 72
 ---
-
-
-
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # load a few R packages
@@ -1456,11 +1465,3 @@ insights derived are both accurate and actionable.
 {{< pagebreak >}}
 
 ## References
-
-
-
-
-
-
-
-

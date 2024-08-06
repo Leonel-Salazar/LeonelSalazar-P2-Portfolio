@@ -16,6 +16,8 @@ library(scales)
 library(showtext)
 library(ggimage)
 
+here()
+
 ```
 
 # Summary/Abstract
