@@ -1457,7 +1457,7 @@ insights derived are both accurate and actionable.
 
 {{< pagebreak >}}
 
-## References
+
 
 
 
