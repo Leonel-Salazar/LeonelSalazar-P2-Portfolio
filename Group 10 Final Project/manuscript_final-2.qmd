@@ -792,7 +792,6 @@ library(e1071)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Load your dataset
-# Assuming your data frame is named 'data_hcny'
 
 data_hcny <- read.csv(here("hcny_CleanDraft.csv"))
 
@@ -937,7 +936,7 @@ ggplot(us_data, aes(x = "", y = percentage, fill = factor)) +
 library(ggplot2)
 library(reshape2)
 
-# Assuming data_clean is your dataset and the first column is to be excluded from correlation analysis
+#the first column is to be excluded from correlation analysis
 # Compute the correlation matrix
 cor_data <- cor(data_clean[,-1])
 print("Correlation Matrix:")
@@ -976,7 +975,7 @@ their interconnected nature.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Write the cleaned data to a new CSV file
 
-# Assuming your dataset is named data_hcny
+
 data_hcny_clean <- data_hcny %>% drop_na()
 
 write.csv(data_hcny_clean, here("hcnydata_cleaned.csv"), row.names = FALSE)
@@ -1051,7 +1050,7 @@ transform_data <- function(data) {
   return(data_transformed)
 }
 
-# Assuming data_hcny_clean is your dataset
+
 data_hcny_clean_transformed <- transform_data(data_hcny_clean[-1])
 
 # Calculate skewness for transformed data
@@ -1322,7 +1321,6 @@ selecting the regularization parameter (C) to balance model accuracy and
 stability.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-# Assuming predictions and data_clean$varroa_mites are already created
 
 # Example data
 data_clean <- data.frame(
@@ -1444,7 +1442,7 @@ versus actual varroa mite values demonstrated a strong linear
 relationship, confirming the model’s high accuracy and effectiveness in
 predicting varroa mite levels.
 
-In conclusion, our comprehensive analysis has provided deep insights
+Our comprehensive analysis has provided deep insights
 into the factors affecting bee populations, highlighting significant
 regional variations and the complex interplay of multiple stressors. The
 findings underscore the importance of targeted, multi-faceted approaches
@@ -1453,9 +1451,9 @@ in bee-related data. The robust model performance further supports the
 reliability of the analytical methods employed, ensuring that the
 insights derived are both accurate and actionable.
 
-{{< pagebreak >}}
+We would not reject the null hypothesis.
 
-## References
+{{< pagebreak >}}
 
 
 

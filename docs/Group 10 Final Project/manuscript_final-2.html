@@ -394,8 +394,8 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="schematic-of-workflow">Schematic of workflow</h2>
 <div class="cell">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-217bfd90dfdb15e39f26" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-217bfd90dfdb15e39f26">{"x":{"diagram":"\n  digraph Data_Analysis_Flowchart {\n    graph [layout = dot, rankdir = LR, label = \"Workflow Schematic\", fontsize = 75, labelloc = \"t\"]\n\n    node [style = filled, fontsize = 50, width = 6, height = 6, penwidth = 8]\n\n    Define_Objectives [label = \"Define Objectives\", shape = oval, color = lightblue]\n    Collect_Data [label = \"Collect Data\", shape = box, color = lightgrey]\n    Clean_Data [label = \"Clean Data\", shape = ellipse, color = lightyellow]\n    Analyze_Data [label = \"Analyze Data\", shape = diamond, color = lightcoral]\n    Interpret_Results [label = \"Interpret Results\", shape = trapezium, color = lightgrey]\n    Visualize_Data [label = \"Visualize Data\", shape = parallelogram, color = lightpink]\n    Compile_Report [label = \"Compile Report\", shape = house, color = lightcyan]\n    Review_Revise [label = \"Review & Revise\", shape = invhouse, color = lightgoldenrodyellow]\n    Present_Report [label = \"Present Report\", shape = hexagon, color = lightseagreen]\n\n    Define_Objectives -> Collect_Data\n    Collect_Data -> Clean_Data\n    Clean_Data -> Analyze_Data\n    Analyze_Data -> Interpret_Results\n    Interpret_Results -> Visualize_Data\n    Visualize_Data -> Compile_Report\n    Compile_Report -> Review_Revise\n    Review_Revise -> Present_Report\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-1c9dd2891744188d0dc4" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-1c9dd2891744188d0dc4">{"x":{"diagram":"\n  digraph Data_Analysis_Flowchart {\n    graph [layout = dot, rankdir = LR, label = \"Workflow Schematic\", fontsize = 75, labelloc = \"t\"]\n\n    node [style = filled, fontsize = 50, width = 6, height = 6, penwidth = 8]\n\n    Define_Objectives [label = \"Define Objectives\", shape = oval, color = lightblue]\n    Collect_Data [label = \"Collect Data\", shape = box, color = lightgrey]\n    Clean_Data [label = \"Clean Data\", shape = ellipse, color = lightyellow]\n    Analyze_Data [label = \"Analyze Data\", shape = diamond, color = lightcoral]\n    Interpret_Results [label = \"Interpret Results\", shape = trapezium, color = lightgrey]\n    Visualize_Data [label = \"Visualize Data\", shape = parallelogram, color = lightpink]\n    Compile_Report [label = \"Compile Report\", shape = house, color = lightcyan]\n    Review_Revise [label = \"Review & Revise\", shape = invhouse, color = lightgoldenrodyellow]\n    Present_Report [label = \"Present Report\", shape = hexagon, color = lightseagreen]\n\n    Define_Objectives -> Collect_Data\n    Collect_Data -> Clean_Data\n    Clean_Data -> Analyze_Data\n    Analyze_Data -> Interpret_Results\n    Interpret_Results -> Visualize_Data\n    Visualize_Data -> Compile_Report\n    Compile_Report -> Review_Revise\n    Review_Revise -> Present_Report\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="cell">
@@ -818,27 +818,27 @@ Cumulative Proportion  0.7105 0.9213 0.9748 0.99447 0.99844 1.00000</code></pre>
 
 Pre-processing: centered (5), scaled (5) 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 10, 10, 10, 10, 10, 9, ... 
+Summary of sample sizes: 10, 10, 9, 10, 10, 10, ... 
 Resampling results across tuning parameters:
 
   C     RMSE      Rsquared  MAE     
-  0.25  18.03489  1         17.88636
-  0.50  16.21844  1         16.06348
-  1.00  13.46922  1         13.36617
-  2.00  13.01346  1         12.93345
-  4.00  13.41830  1         13.34695
+  0.25  17.47090  1         17.32877
+  0.50  15.31500  1         15.14371
+  1.00  12.31657  1         12.19986
+  2.00  12.22116  1         12.11922
+  4.00  12.65070  1         12.55626
 
-Tuning parameter 'sigma' was held constant at a value of 2.082048
+Tuning parameter 'sigma' was held constant at a value of 1.413889
 RMSE was used to select the optimal model using the smallest value.
-The final values used for the model were sigma = 2.082048 and C = 2.</code></pre>
+The final values used for the model were sigma = 1.413889 and C = 2.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     sigma    C     RMSE Rsquared      MAE    RMSESD RsquaredSD     MAESD
-1 2.082048 0.25 18.03489        1 17.88636 10.763736         NA 10.674605
-2 2.082048 0.50 16.21844        1 16.06348 10.028997         NA  9.940273
-3 2.082048 1.00 13.46922        1 13.36617  9.688449         NA  9.617395
-4 2.082048 2.00 13.01346        1 12.93345  9.514582         NA  9.458452
-5 2.082048 4.00 13.41830        1 13.34695  9.270342         NA  9.220917</code></pre>
+1 1.413889 0.25 17.47090        1 17.32877 10.578373         NA 10.495010
+2 1.413889 0.50 15.31500        1 15.14371 10.249602         NA 10.157358
+3 1.413889 1.00 12.31657        1 12.19986  9.927572         NA  9.857904
+4 1.413889 2.00 12.22116        1 12.11922  9.854447         NA  9.796499
+5 1.413889 4.00 12.65070        1 12.55626  9.598347         NA  9.547072</code></pre>
 </div>
 </div>
 <p>The table presents the performance metrics of a model evaluated with different values of the parameter (C), while keeping the parameter () constant at 0.05440357. The metrics include RMSE (Root Mean Square Error), Rsquared (Coefficient of Determination), MAE (Mean Absolute Error), RMSESD (Standard Deviation of RMSE), and MAESD (Standard Deviation of MAE).</p>
@@ -892,11 +892,9 @@ The final values used for the model were sigma = 2.082048 and C = 2.</code></pre
 <p><strong>Principal Component Analysis (PCA)</strong>: - PCA results indicated that the first two principal components accounted for over 92% of the variance in the dataset. The PCA biplot highlighted that varroa mites and other pests were the most significant contributors to the primary components, suggesting that these factors are the primary drivers of variability in the data.</p>
 <p><strong>Model Performance Metrics</strong>: - Evaluation of model performance across different values of parameter (C) showed that the model performed best at (C = 0.50) in terms of RMSE, while consistency was highest at (C = 1.00). The consistently perfect (R^2) values indicated potential overfitting.</p>
 <p><strong>Predictions vs.&nbsp;Actual Values</strong>: - The scatter plot of predictions versus actual varroa mite values demonstrated a strong linear relationship, confirming the model’s high accuracy and effectiveness in predicting varroa mite levels.</p>
-<p>In conclusion, our comprehensive analysis has provided deep insights into the factors affecting bee populations, highlighting significant regional variations and the complex interplay of multiple stressors. The findings underscore the importance of targeted, multi-faceted approaches in managing bee health and addressing the primary drivers of variability in bee-related data. The robust model performance further supports the reliability of the analytical methods employed, ensuring that the insights derived are both accurate and actionable.</p>
+<p>Our comprehensive analysis has provided deep insights into the factors affecting bee populations, highlighting significant regional variations and the complex interplay of multiple stressors. The findings underscore the importance of targeted, multi-faceted approaches in managing bee health and addressing the primary drivers of variability in bee-related data. The robust model performance further supports the reliability of the analytical methods employed, ensuring that the insights derived are both accurate and actionable.</p>
+<p>We would not reject the null hypothesis.</p>
 <div style="page-break-after: always;"></div>
-</section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
 </section>
