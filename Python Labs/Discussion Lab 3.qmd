@@ -1,0 +1,53 @@
+---
+title: "Lab 3 Discussion"
+author: "Leonel Salazar, IGE436"
+format: docx
+---
+
+### Report: Observations on Training AI Models with Hyperparameter Tuning
+
+**1. Introduction**
+
+In this lab, we trained an AI model to detect cyberbullying using a dataset of online text samples, employing a BERT-based model for natural language understanding. A significant focus was on exploring how hyperparameter tuning—adjustments to training epochs, batch sizes, and learning rates—affects the model’s performance. Through the training and tuning process, we observed substantial changes in model accuracy, loss metrics, and overall behavior.
+
+**2. Model Performance Before Hyperparameter Tuning**
+
+Initially, the model was trained with default hyperparameters:
+   - **Learning Rate**: 2e-5
+   - **Epochs**: Limited range (2-5 initially)
+   - **Batch Size**: 32
+   - **Dropout**: 0.3
+   
+With these parameters, the model's training accuracy was moderate but could be significantly improved. The default parameters provided a foundational performance but showed limitations in generalizing well on validation and test sets. For example:
+   - **Training Loss and Accuracy**: Improved during training epochs, but plateaued quickly, indicating potential underfitting.
+   - **Validation Loss and Accuracy**: Showed variability, suggesting the model had not yet converged well on the optimal solution.
+
+**3. Impact of Hyperparameter Tuning**
+
+Several hyperparameters were adjusted to optimize the model's performance:
+
+   - **Epochs**: Increasing the epochs allowed the model to train longer, enabling better convergence. However, after a certain point (e.g., beyond 7 epochs), additional epochs resulted in diminishing returns, with the model showing signs of overfitting, particularly in validation and test loss.
+   
+   - **Learning Rate**: This had the most noticeable effect. A learning rate of **1e-5** provided the most stable and optimal results, balancing efficient learning without oscillating or diverging. Comparatively:
+      - **0.01** and **0.001** were too high, leading to unstable training, and caused the model to fail in converging effectively.
+      - **1e-5** struck a balance by allowing gradual convergence and stability across training, validation, and test sets, achieving improved final accuracies across these metrics.
+      
+   - **Batch Size**: The batch size of **32** was retained as it balanced computational efficiency and stable gradient updates. Smaller batches could introduce more variance in the gradient descent path, while larger batches could have dampened the learning dynamics.
+
+**4. Final Model Performance**
+
+Post-tuning, the model achieved the following metrics:
+   - **Training Accuracy**: ~98%
+   - **Validation Accuracy**: ~87%
+   - **Test Accuracy**: ~81%
+   
+These metrics reflect a well-balanced model that avoids both underfitting and overfitting. The tuned hyperparameters enabled the model to generalize effectively on unseen data (test set), marking a substantial improvement from its initial configuration.
+
+**5. Conclusion**
+
+Through this hyperparameter tuning process, the following conclusions were drawn:
+   - **Learning Rate** is critical; smaller values, especially for deep models like BERT, offer more controlled and stable learning.
+   - **Epochs** need careful balancing. Longer training yields better accuracy but can risk overfitting if unchecked.
+   - **Model Performance** depends on fine-tuning rather than relying solely on default parameters, emphasizing the necessity of a tailored approach for specific tasks and datasets.
+
+This lab has underscored the value of hyperparameter tuning in AI model training, highlighting how such adjustments can drastically enhance model accuracy and robustness for real-world applications like cyberbullying detection.
