@@ -1,0 +1,129 @@
+---
+title: "Case Study Down Jones"
+author: "Leonel Salazar, Seth Harris, Joaquin Ramirez, Collin Real"
+format: docx
+---
+
+
+```{r}
+
+library(tidyverse)
+library(here)
+library(ggplot2)
+library(gridExtra)
+library(tseries)
+library(dplyr)
+library(quantmod)
+
+```
+
+```{r}
+
+# Use the here function to construct the file path and import the dataset
+data <- read.csv(here("dow_jones_index.data.csv"), header = TRUE, sep = ",")
+
+head(data)
+
+
+str(data)
+
+```
+
+```{r}
+
+# Check for missing data or NA values in the dataset
+
+missing_data_summary <- colSums(is.na(data))
+missing_data_summary
+```
+
+```{r}
+
+# Remove rows with missing data and create a new dataset named data_clean
+data_clean <- na.omit(data)
+
+str(data_clean)
+```
+
+
+```{r}
+
+# Convert 'quarter' variable to a factor
+data_clean$quarter <- as.factor(data_clean$quarter)
+
+# Convert 'stock' variable to a factor
+data_clean$stock <- as.factor(data_clean$stock)
+
+# Convert 'date' variable to Date class format
+data_clean$date <- as.Date(data_clean$date, format = "%m/%d/%Y")
+
+# Remove non-numeric characters from 'open', 'high', 'low', and 'close' before converting to numeric
+data_clean$open <- as.numeric(gsub("[^0-9.]", "", data_clean$open))
+data_clean$high <- as.numeric(gsub("[^0-9.]", "", data_clean$high))
+data_clean$low <- as.numeric(gsub("[^0-9.]", "", data_clean$low))
+data_clean$close <- as.numeric(gsub("[^0-9.]", "", data_clean$close))
+
+# Convert 'volume' variable to numeric
+data_clean$volume <- as.numeric(gsub("[^0-9.]", "", data_clean$volume))
+
+# # Convert 'percent_change_price' to numeric by removing '%' and dividing by 100
+# data_clean$percent_change_price <- as.numeric(gsub("%", "", data_clean$percent_change_price)) / 100
+# 
+# Convert 'percent_change_volume_over_last_wk' to numeric by removing '%'
+data_clean$percent_change_volume_over_last_wk <- as.numeric(gsub("%", "", data_clean$percent_change_volume_over_last_wk))
+
+# Remove non-numeric characters from 'previous_weeks_volume', 'next_weeks_open', and 'next_weeks_close' before converting to numeric
+data_clean$previous_weeks_volume <- as.numeric(gsub("[^0-9.]", "", data_clean$previous_weeks_volume))
+data_clean$next_weeks_open <- as.numeric(gsub("[^0-9.]", "", data_clean$next_weeks_open))
+data_clean$next_weeks_close <- as.numeric(gsub("[^0-9.]", "", data_clean$next_weeks_close))
+
+# # Convert 'percent_change_next_weeks_price' to numeric by removing '%' and dividing by 100
+# data_clean$percent_change_next_weeks_price <- as.numeric(gsub("%", "", data_clean$percent_change_next_weeks_price)) / 100
+
+# Convert 'days_to_next_dividend' to numeric
+data_clean$days_to_next_dividend <- as.numeric(gsub("[^0-9.]", "", data_clean$days_to_next_dividend))
+
+
+
+str(data_clean)
+
+
+```
+
+```{r}
+
+# Step 1: Inspect the unique stock symbols
+unique_stocks <- unique(data$stock) # Adjust column name if different
+
+# Step 2: Randomly select 5 unique stocks
+set.seed(123) # Set seed for reproducibility
+selected_stocks <- sample(unique_stocks, 5)
+
+
+# Step 3: Create a directory for each stock and save its data
+for (stock in selected_stocks) {
+  # Filter data for the current stock
+  stock_data <- data %>%
+    filter(stock == !!stock) %>%
+    select(stock,date, open, high, low, close, volume) # Adjust column names to match your dataset
+  
+  # Create a dedicated folder for the stock
+  stock_folder <- here("output_files", paste0("stock_", stock))
+  dir.create(stock_folder, showWarnings = FALSE, recursive = TRUE)
+  
+  # Save the stock data as a CSV file within its folder
+  file_name <- here(stock_folder, paste0("stock_", stock, ".csv"))
+  write.csv(stock_data, file_name, row.names = FALSE)
+}
+```
+
+```{r}
+
+# Use the here function to construct the file path and import the dataset
+BA <- read.csv(here("stock_BA.csv"), header = TRUE, sep = ",")
+GE <- read.csv(here("stock_GE.csv"), header = TRUE, sep = ",")
+INTC <- read.csv(here("stock_INTC.csv"), header = TRUE, sep = ",")
+JNJ <- read.csv(here("stock_JNJ.csv"), header = TRUE, sep = ",")
+MCD <- read.csv(here("stock_MCD.csv"), header = TRUE, sep = ",")
+```
+

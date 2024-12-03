@@ -1,0 +1,1154 @@
+---
+title: "Bank Marketing Case Study"
+author: "Collin Real, Leonel Salazar, Seth Harris, Joaquin Ramirez"
+format: docx
+---
+
+---
+title: "Bank Marketing Case Study"
+
+format: docx
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(here)
+library(caret)
+library(dplyr)
+library(stats)
+library(car)
+library(pscl)
+library(flextable)
+library(corrplot)
+library(pROC)
+library(randomForest)
+
+
+
+
+  
+```
+
+
+```{r}
+
+# Use the here function to construct the file path and import the dataset
+data <- read.csv(here("bank-additional_clean.csv"), header = TRUE, sep = ",")
+
+# View the first few rows of the dataset
+head(data)
+
+str(data)
+
+
+```
+
+```{r}
+
+# Function to check for missing (NA) values and "unknown" entries in all columns
+check_missing_unknown <- function(data) {
+  result <- data.frame(
+    Variable = colnames(data),
+    Missing_Count = sapply(data, function(x) sum(is.na(x))),  # Count of NA values
+    Missing_Percentage = sapply(data, function(x) mean(is.na(x)) * 100),  # Percentage of NA values
+    Unknown_Count = sapply(data, function(x) sum(tolower(as.character(x)) == "unknown", na.rm = TRUE)),  # Count of "unknown"
+    Unknown_Percentage = sapply(data, function(x) mean(tolower(as.character(x)) == "unknown", na.rm = TRUE) * 100)  # Percentage of "unknown"
+  )
+  return(result)
+}
+
+
+missing_unknown_summary <- check_missing_unknown(data)
+
+# Display the summary table
+print(missing_unknown_summary)
+
+```
+
+```{r}
+
+# Convert all integer and numeric variables to numeric type
+data[] <- lapply(data, function(x) {
+  if (is.integer(x) || is.numeric(x)) {
+    return(as.numeric(x))  # Convert to numeric
+  } else if (is.character(x)) {
+    return(factor(x))  # Convert character to factor
+  } else {
+    return(x)  # Leave other types unchanged
+  }
+})
+
+# Verify the changes
+str(data)
+
+```
+
+```{r}
+
+# Transform the 'pdays' column
+data_clean <- data %>%
+  mutate(pdays = ifelse(pdays == 999, "not previously contacted", "previously contacted"))
+
+# Convert 'pdays' to a factor
+data_clean$pdays <- as.factor(data_clean$pdays)
+
+# Display the first few rows to verify the change
+head(data_clean)
+
+```
+
+
+```{r}
+
+
+# Remove the 'duration' variable
+data_clean <- select(data_clean, -duration)
+
+# Save the cleaned dataset as a new CSV file
+write.csv(data_clean, "data_clean.csv", row.names = FALSE)
+
+# Verify the dataset has been saved
+file.exists("data_clean.csv")
+
+```
+
+
+```{r}
+
+# Export the dataset to a CSV file in the same location
+write_csv(data, here("data_new.csv"))
+
+# Confirm the file is saved by showing the file path
+cat("Data has been exported to:", here("data_new.csv"))
+
+```
+
+```{r}
+
+# Check the distribution of the target variable 'y'
+table(data$y)
+
+# Calculate the percentage distribution of 'y'
+prop.table(table(data$y)) * 100
+
+```
+
+
+```{r}
+
+# Function to count "unknown" values in each column
+count_unknowns <- function(df) {
+  sapply(df, function(x) sum(x == "unknown", na.rm = TRUE))
+}
+
+# Apply the function to the dataset
+unknown_counts <- count_unknowns(data)
+
+# Display the counts
+print(unknown_counts)
+
+# Calculate the total number of "unknown" values across all variables
+total_unknowns <- sum(unknown_counts)
+print(paste("Total number of 'unknown' values across all variables:", total_unknowns))
+
+```
+
+
+
+```{r}
+
+
+
+# Check for NA values in each column
+na_counts <- sapply(data, function(x) sum(is.na(x)))
+
+# Display the counts of NA values for each column
+print(na_counts)
+
+# Calculate the total number of NA values across all columns
+total_na <- sum(na_counts)
+print(paste("Total number of NA values across all columns:", total_na))
+
+```
+
+```{r}
+
+# Up-sample the minority class
+set.seed(123)  # For reproducibility
+data_clean_upsampled <- upSample(x = data_clean %>% select(-y), y = data_clean$y)  # 'y' is the target variable
+
+# Check the new class distribution
+table(data_clean_upsampled$Class)
+
+```
+```{r}
+
+# Down-sample the majority class
+set.seed(123)  # For reproducibility
+data_clean_downsampled <- downSample(x = data_clean %>% select(-y), y = data_clean$y)  # 'y' is the target variable
+
+# Check the new class distribution
+table(data_clean_downsampled$Class)
+
+
+```
+
+
+
+
+
+```{r}
+
+# Load necessary libraries
+library(dplyr)
+
+
+
+# Calculate the count of "unknown" values for each column
+unknown_counts <- sapply(data_clean_downsampled, function(x) sum(x == "unknown", na.rm = TRUE))
+
+# Convert the counts to a data frame for better visualization
+unknown_counts_df <- data.frame(
+  Variable = names(unknown_counts),
+  Unknown_Count = unknown_counts
+)
+
+# Calculate the proportion of "unknown" values for each column
+unknown_counts_df <- unknown_counts_df %>%
+  mutate(Total_Count = nrow(data_clean_downsampled),  # Total rows in the dataset
+         Unknown_Proportion = Unknown_Count / Total_Count * 100)  # Proportion in percentage
+
+# Display the data frame with counts and proportions
+print(unknown_counts_df)
+
+# Calculate the overall percentage of "unknown" values across all variables
+total_unknowns <- sum(unknown_counts)
+total_values <- nrow(data_clean_downsampled) * ncol(data_clean_downsampled)  # Total number of data points
+overall_unknown_percentage <- (total_unknowns / total_values) * 100
+
+print(paste("Overall percentage of 'unknown' values in the dataset:", round(overall_unknown_percentage, 2), "%"))
+
+```
+
+```{r}
+
+# Remove rows with 'unknown' values
+data_clean_downsampled_no_unknown <- data_clean_downsampled %>%
+  filter_all(~ . != "unknown")
+
+# Check the new size of the dataset
+print(dim(data_clean_downsampled_no_unknown))
+
+```
+
+```{r}
+
+# Load necessary libraries
+library(dplyr)
+
+# Remove rows with 'unknown' values from the downsampled data
+data_clean_downsampled_no_unknown <- data_clean_downsampled %>%
+  filter_all(~ . != "unknown")
+
+# Check the distribution of the target variable 'y' after removing unknowns
+balance_after_cleaning <- table(data_clean_downsampled_no_unknown$Class)  # Assuming 'Class' is the name of the target variable column
+
+# Print the class balance
+print(balance_after_cleaning)
+
+# Calculate and display the proportion of each class
+balance_proportion <- prop.table(balance_after_cleaning) * 100
+print(balance_proportion)
+
+```
+
+```{r}
+
+# Export the dataset to a CSV file in the same location
+write_csv(data, here("data_clean_downsampled_no_unknown .csv"))
+
+# Confirm the file is saved by showing the file path
+cat("Data has been exported to:", here("data_clean_downsampled_no_unknown .csv"))
+```
+
+
+
+```{r}
+
+df <- data_clean_downsampled_no_unknown
+
+
+# Rename the column 'Class' to 'y'
+df <- df %>% rename(y = Class)
+
+# Identify categorical and numeric variables
+variables <- names(df)
+var_types <- ifelse(sapply(df, is.numeric), "Numeric", "Categorical")
+
+# Create a data frame to store variable names and their types
+var_table <- data.frame(Variable = variables, Type = var_types)
+
+# Create a flextable
+flex_table <- flextable(var_table)
+
+# Apply custom formatting:
+# Highlight "Categorical" types with light blue, and "Numeric" types with light pink
+flex_table <- flextable::bg(flex_table, j = "Type", i = ~ Type == "Categorical", bg = "lightblue")  # Highlight categorical
+flex_table <- flextable::bg(flex_table, j = "Type", i = ~ Type == "Numeric", bg = "lightpink")      # Highlight numeric
+
+# Adjust column widths for better readability
+flex_table <- autofit(flex_table)
+
+# Display the flextable
+flex_table
+
+
+```
+
+
+
+```{r}
+
+# Set up a 3x3 plotting area
+par(mfrow=c(3,3))
+
+# Identify categorical variables (factor or character type)
+categorical_vars <- sapply(df, function(x) is.factor(x) | is.character(x))  
+categorical_data <- df[, categorical_vars]  # Subset the dataframe for categorical variables
+
+# Loop through all categorical variables and plot bar plots
+for (var in names(categorical_data)) {
+  barplot(table(categorical_data[[var]]), main=paste("Bar Plot of", var), xlab=var, col="lightblue")
+}
+
+# Reset the plotting layout to 1x1 after plotting
+par(mfrow=c(1,1))
+
+```
+
+```{r}
+
+# Set up a 3x3 plotting area
+par(mfrow=c(3,3))
+
+# Loop through all the columns and plot histograms for continuous (numeric) variables
+numeric_vars <- sapply(df, is.numeric)  # Identify numeric variables
+continuous_vars <- df[, numeric_vars]   # Subset the dataframe for numeric variables
+
+# Plot histograms for each numeric variable
+for (var in names(continuous_vars)) {
+  hist(continuous_vars[[var]], main=paste("Histogram of", var), xlab=var, col="lightblue", breaks=20)
+}
+
+# Reset the plotting layout to 1x1 after plotting
+par(mfrow=c(1,1))
+
+
+```
+
+```{r}
+
+# Set up a 3x3 plotting area
+par(mfrow=c(1,2))
+
+# Identify numeric variables in the dataset
+numeric_vars <- sapply(df, is.numeric)
+
+# Subset the dataset to include only the numeric variables
+numeric_data <- df[, numeric_vars]
+
+# Loop through the numeric variables and create boxplots
+for (var in names(numeric_data)) {
+  boxplot(numeric_data[[var]], main=paste("Boxplot of", var), xlab=var, col="lightblue")
+}
+
+# Reset the plotting layout to 1x1 after plotting
+
+
+
+```
+
+```{r}
+
+library(corrplot)
+
+# Select only the numeric variables from the dataset
+numeric_vars <- df[, sapply(df, is.numeric)]
+
+# Create the correlation matrix
+cor_matrix <- cor(numeric_vars, use="complete.obs")
+
+# Visualize the correlation matrix
+corrplot(cor_matrix, method="circle", type="lower", 
+         tl.col="black", tl.cex=0.8, title="Correlation Matrix of Numeric Variables",
+         mar=c(0,0,1,0))
+
+
+```
+### Key Assumptions of Logistic Regression:
+
+1. **Binary Outcome Variable**: The dependent variable should be binary.
+2. **Independence of Observations**: Observations should be independent of each other.
+3. **No Multicollinearity**: Predictor variables should not be highly correlated with each other.
+4. **Linearity of Independent Variables and Log-Odds**: There should be a linear relationship between continuous predictors and the log-odds of the outcome.
+5. **Sufficient Sample Size**: Logistic regression requires a large sample size to provide reliable results.
+
+### Steps to Test the Assumptions
+
+### 1. **Check for Binary Outcome Variable**
+Ensure the dependent variable (`y`) is binary.
+
+```{r}
+# Check the levels of the outcome variable
+table(df$y)
+```
+
+```{r}
+
+# Check for variables with only one level
+lapply(df, function(x) length(unique(x)))
+
+```
+
+
+
+```{r}
+
+# Set a seed for reproducibility
+set.seed(123)
+
+# Split the data into training (70%) and testing (30%) sets
+trainIndex <- createDataPartition(df$y, p = 0.7, list = FALSE)
+train_data <- df[trainIndex, ]  # 70% training data
+test_data  <- df[-trainIndex, ] # 30% test data
+
+```
+
+
+
+```{r}
+
+# Fit the logistic regression model on the training set
+logit_model_train <- glm(y ~ age + job + marital + education + housing + loan + contact + month + 
+                         day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                         cons.price.idx + cons.conf.idx, 
+                         family = binomial, data = train_data)
+
+# Display the summary of the model
+summary(logit_model_train)
+
+  
+
+```
+
+- **Interpretation**: Variables with VIF > 5 may have multicollinearity issues.
+
+```{r}
+
+# Calculate VIF values for the logistic regression model
+vif_values_train <- vif(logit_model_train)
+
+# Print the VIF values
+print(vif_values_train)
+
+
+```
+
+```{r}
+
+# Example: Remove a variable with high VIF and refit the model
+logit_model_train_refit <- glm(y ~ age + job + marital + education + housing + loan + contact + month + 
+                               day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                               cons.price.idx, 
+                               family = binomial, data = train_data)
+
+# Recheck VIF values for the refit model
+vif_values_refit <- vif(logit_model_train_refit)
+print(vif_values_refit)
+
+
+
+
+
+```
+
+
+
+
+
+```{r}
+# Check the number of events (e.g., 1's and 0's in the outcome variable)
+table(train_data$y)
+
+# Ensure the number of events is at least 10 times the number of predictors
+```
+
+
+
+
+```{r}
+
+# Predict probabilities for the training data using the logistic regression model
+predicted_probabilities_train <- predict(logit_model_train, newdata = train_data, type = "response")
+
+# Convert probabilities to binary outcome (using 0.5 as the cutoff)
+predicted_classes_train <- ifelse(predicted_probabilities_train > 0.5, 1, 0)
+
+# Create confusion matrix for training data
+confusion_matrix_train <- table(predicted_classes_train, train_data$y)
+print(confusion_matrix_train)
+
+# Extract the values from the confusion matrix
+TN <- confusion_matrix_train[1,1]  # True Negatives
+FP <- confusion_matrix_train[1,2]  # False Positives
+FN <- confusion_matrix_train[2,1]  # False Negatives
+TP <- confusion_matrix_train[2,2]  # True Positives
+
+# Calculate accuracy
+accuracy_train <- (TP + TN) / sum(confusion_matrix_train)
+
+# Calculate precision, recall, and F1 score
+precision_train <- ifelse((TP + FP) > 0, TP / (TP + FP), 0)  # TP / (TP + FP)
+recall_train <- ifelse((TP + FN) > 0, TP / (TP + FN), 0)     # TP / (TP + FN)
+f1_score_train <- ifelse((precision_train + recall_train) > 0, 
+                         2 * ((precision_train * recall_train) / (precision_train + recall_train)), 
+                         0)
+
+# Print the performance metrics for the training data
+print(paste("Accuracy:", accuracy_train))
+print(paste("Precision:", precision_train))
+print(paste("Recall:", recall_train))
+print(paste("F1 Score:", f1_score_train))
+
+
+```
+
+```{r}
+
+
+accuracy <- 0.7722   
+precision <- 0.7259  
+recall <- 0.8174     
+f1_score <- 0.7689   
+
+# Create a dataframe with the performance metrics
+metrics_data <- data.frame(
+  Metric = c("Accuracy", "Precision", "Recall", "F1 Score"),
+  Value = c(accuracy, precision, recall, f1_score)
+)
+
+
+
+# Create the flextable
+performance_table <- flextable(metrics_data)
+
+# Apply consistent styling to the flextable with alternating colors
+performance_table <- performance_table %>%
+  color(j = 1, color = "black") %>%                        # Text color for Metric column
+  color(j = 2, color = "darkblue") %>%                     # Text color for Value column
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "Accuracy") %>% # Background color for Accuracy
+  bg(part = "body", bg = "lightblue", i = ~ Metric == "Precision") %>% # Background color for Precision
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "Recall") %>%   # Background color for Recall
+  bg(part = "body", bg = "lightblue", i = ~ Metric == "F1 Score") %>% # Background color for F1 Score
+  align(j = 2, align = "center", part = "body") %>%        # Center-align the values
+  autofit()                                                # Adjust column widths
+
+# Print the flextable
+performance_table
+
+```
+
+```{r}
+
+# Predict probabilities for the training set using the logistic regression model
+predicted_probabilities_train <- predict(logit_model_train, newdata = train_data, type = "response")
+
+# Create the ROC curve using the training data
+roc_curve_train <- roc(train_data$y, predicted_probabilities_train)
+
+# Plot the ROC curve for the training data
+plot(roc_curve_train, main = "ROC Curve for Logistic Regression Model (Training Data)", col = "blue", lwd = 2)
+
+# Calculate the AUC for the training data
+auc_train <- auc(roc_curve_train)
+
+# Print the AUC value for the training data
+print(paste("AUC for Training Data:", auc_train))
+
+
+```
+
+
+
+```{r}
+
+# Predict probabilities for the test data using the logistic regression model
+predicted_probabilities_test <- predict(logit_model_train, newdata = test_data, type = "response")
+
+# Convert probabilities to binary outcomes (using 0.5 as the cutoff)
+predicted_classes_test <- ifelse(predicted_probabilities_test > 0.5, 1, 0)
+
+# Create confusion matrix for the test data
+confusion_matrix_test <- table(predicted_classes_test, test_data$y)
+print(confusion_matrix_test)
+
+# Extract values from the confusion matrix for test data
+TN_test <- confusion_matrix_test[1,1]  # True Negatives
+FP_test <- confusion_matrix_test[1,2]  # False Positives
+FN_test <- confusion_matrix_test[2,1]  # False Negatives
+TP_test <- confusion_matrix_test[2,2]  # True Positives
+
+# Calculate accuracy for the test data
+accuracy_test <- (TP_test + TN_test) / sum(confusion_matrix_test)
+
+# Calculate precision, recall, and F1 score for the test data
+precision_test <- ifelse((TP_test + FP_test) > 0, TP_test / (TP_test + FP_test), 0)
+recall_test <- ifelse((TP_test + FN_test) > 0, TP_test / (TP_test + FN_test), 0)
+f1_score_test <- ifelse((precision_test + recall_test) > 0, 
+                        2 * ((precision_test * recall_test) / (precision_test + recall_test)), 
+                        0)
+
+# Print the performance metrics for the test data
+print(paste("Accuracy (Test):", accuracy_test))
+print(paste("Precision (Test):", precision_test))
+print(paste("Recall (Test):", recall_test))
+print(paste("F1 Score (Test):", f1_score_test))
+
+
+
+```
+
+```{r}
+
+# Checking for multicollinearity (VIF values) - same as training data, but for the model
+vif_values_test <- vif(logit_model_train)  # VIF is the same as in training
+print(vif_values_test)
+
+```
+
+```{r}
+
+
+# Create the ROC curve for the test data
+roc_curve_test <- roc(test_data$y, predicted_probabilities_test)
+
+# Plot the ROC curve for the test data
+plot(roc_curve_test, main = "ROC Curve for Logistic Regression Model (Test Data)", col = "blue", lwd = 2)
+
+# Calculate the AUC for the test data
+auc_test <- auc(roc_curve_test)
+
+# Print the AUC value for the test data
+print(paste("AUC for Test Data:", auc_test))
+
+
+```
+```{r}
+
+
+# Create a dataframe for comparison
+metrics_comparison <- data.frame(
+  Metric = c("Accuracy", "Precision", "Recall", "F1 Score", "AUC"),
+  Training = c(0.7721, 0.7259, 0.8174, 0.7689, 0.8531),
+  Test = c(0.7406, 0.6846, 0.7917, 0.7343, 0.8183)
+)
+
+# Create the flextable
+comparison_table <- flextable(metrics_comparison)
+
+# Format the flextable with some custom styles
+comparison_table <- comparison_table %>%
+  color(j = 1, color = "black") %>%                        # Text color for Metric column
+  color(j = 2:3, color = "darkblue") %>%                   # Text color for values in Training and Test columns
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "Accuracy") %>%
+  bg(part = "body", bg = "lightblue", i = ~ Metric == "Precision") %>%
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "Recall") %>%
+  bg(part = "body", bg = "lightblue", i = ~ Metric == "F1 Score") %>%
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "AUC") %>%
+  align(j = 2:3, align = "center", part = "body") %>%      # Center-align the values
+  autofit()                                                # Adjust column widths
+
+# Print the flextable
+comparison_table
+
+```
+
+
+
+
+
+```{r}
+
+# Fit the Random Forest model
+set.seed(123)  # Set a seed for reproducibility
+
+rf_model <- randomForest(y ~ age + job + marital + education + housing + loan + contact + month + 
+                         day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                         cons.price.idx + cons.conf.idx, 
+                         data = df, ntree = 500, mtry = 3, importance = TRUE)
+
+# Print the model summary
+print(rf_model)
+
+```
+
+
+```{r}
+
+# Predict the class (0/1) for the test data
+predicted_rf <- predict(rf_model, df)
+
+# Create confusion matrix
+conf_matrix_rf <- table(predicted_rf, df$y)
+
+# Print confusion matrix
+print(conf_matrix_rf)
+
+# Calculate accuracy
+accuracy_rf <- mean(predicted_rf == df$y)
+print(paste("Random Forest Accuracy:", accuracy_rf))
+
+```
+
+```{r}
+
+# Get predicted probabilities from the Random Forest model
+predicted_probabilities_rf <- predict(rf_model, df, type = "prob")[,2]
+
+# Plot the ROC curve
+roc_curve_rf <- roc(df$y, predicted_probabilities_rf)
+plot(roc_curve_rf)
+
+# Calculate the AUC
+auc_rf <- auc(roc_curve_rf)
+print(paste("AUC for Random Forest:", auc_rf))
+
+```
+```{r}
+
+# Get variable importance
+importance_rf <- importance(rf_model)
+
+# Plot variable importance
+varImpPlot(rf_model)
+
+```
+
+
+
+```{r}
+
+
+# Set a seed for reproducibility
+set.seed(123)
+
+# Train the Random Forest model on the training data
+rf_model_train <- randomForest(y ~ age + job + marital + education + housing + loan + contact + month +
+                               day_of_week + campaign + pdays + previous + poutcome + emp.var.rate +
+                               cons.price.idx + cons.conf.idx,
+                               data = train_data, ntree = 500, mtry = 3, importance = TRUE)
+
+# Print the summary of the Random Forest model (training data)
+print(rf_model_train)
+
+```
+
+
+```{r}
+
+# Manually input the confusion matrix values
+TN_rf_train <- 177  # True Negatives
+FP_rf_train <- 60   # False Positives
+FN_rf_train <- 85   # False Negatives
+TP_rf_train <- 174  # True Positives
+
+# Calculate accuracy
+accuracy_rf_train <- (TP_rf_train + TN_rf_train) / (TP_rf_train + TN_rf_train + FP_rf_train + FN_rf_train)
+print(paste("Accuracy (Training):", accuracy_rf_train))
+
+# Calculate precision, recall, and F1 score, handling division by zero
+precision_rf_train <- ifelse((TP_rf_train + FP_rf_train) > 0, TP_rf_train / (TP_rf_train + FP_rf_train), 0)
+recall_rf_train <- ifelse((TP_rf_train + FN_rf_train) > 0, TP_rf_train / (TP_rf_train + FN_rf_train), 0)
+f1_score_rf_train <- ifelse((precision_rf_train + recall_rf_train) > 0,
+                            2 * ((precision_rf_train * recall_rf_train) / (precision_rf_train + recall_rf_train)),
+                            0)
+
+# Print the metrics for the training data
+print(paste("Precision (Training):", precision_rf_train))
+print(paste("Recall (Training):", recall_rf_train))
+print(paste("F1 Score (Training):", f1_score_rf_train))
+
+
+
+```
+```{r}
+
+# Manually input the confusion matrix values for test data
+TN_rf_test <- 82  # True Negatives
+FP_rf_test <- 40  # False Positives
+FN_rf_test <- 19  # False Negatives
+TP_rf_test <- 71  # True Positives
+
+# Calculate accuracy for test data
+accuracy_rf_test <- (TP_rf_test + TN_rf_test) / (TP_rf_test + TN_rf_test + FP_rf_test + FN_rf_test)
+print(paste("Accuracy (Test):", accuracy_rf_test))
+
+# Calculate precision, recall, and F1 score, handling division by zero
+precision_rf_test <- ifelse((TP_rf_test + FP_rf_test) > 0, TP_rf_test / (TP_rf_test + FP_rf_test), 0)
+recall_rf_test <- ifelse((TP_rf_test + FN_rf_test) > 0, TP_rf_test / (TP_rf_test + FN_rf_test), 0)
+f1_score_rf_test <- ifelse((precision_rf_test + recall_rf_test) > 0,
+                           2 * ((precision_rf_test * recall_rf_test) / (precision_rf_test + recall_rf_test)),
+                           0)
+
+# Print the metrics for the test data
+print(paste("Precision (Test):", precision_rf_test))
+print(paste("Recall (Test):", recall_rf_test))
+print(paste("F1 Score (Test):", f1_score_rf_test))
+
+
+```
+
+```{r}
+
+# Predict probabilities for the ROC and AUC on the training data
+predicted_probabilities_rf_train <- predict(rf_model_train, newdata = train_data, type = "prob")[, 2]
+roc_curve_rf_train <- roc(train_data$y, predicted_probabilities_rf_train)
+auc_rf_train <- auc(roc_curve_rf_train)
+
+# Predict probabilities for the ROC and AUC on the test data
+predicted_probabilities_rf_test <- predict(rf_model_train, newdata = test_data, type = "prob")[, 2]
+roc_curve_rf_test <- roc(test_data$y, predicted_probabilities_rf_test)
+auc_rf_test <- auc(roc_curve_rf_test)
+
+# Print AUC for both datasets
+print(paste("AUC (Training):", auc_rf_train))
+print(paste("AUC (Test):", auc_rf_test))
+
+```
+
+
+```{r}
+
+# Create a dataframe for Random Forest comparison
+rf_metrics_comparison <- data.frame(
+  Metric = c("Accuracy", "Precision", "Recall", "F1 Score", "AUC"),
+  Training = c(accuracy_rf_train, precision_rf_train, recall_rf_train, f1_score_rf_train, auc_rf_train),
+  Test = c(accuracy_rf_test, precision_rf_test, recall_rf_test, f1_score_rf_test, auc_rf_test)
+)
+
+# Create the flextable for Random Forest model comparison
+rf_comparison_table <- flextable(rf_metrics_comparison)
+
+# Format the flextable with some custom styles
+rf_comparison_table <- rf_comparison_table %>%
+  color(j = 1, color = "black") %>%
+  color(j = 2:3, color = "darkblue") %>%
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "Accuracy") %>%
+  bg(part = "body", bg = "lightblue", i = ~ Metric == "Precision") %>%
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "Recall") %>%
+  bg(part = "body", bg = "lightblue", i = ~ Metric == "F1 Score") %>%
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "AUC") %>%
+  align(j = 2:3, align = "center", part = "body") %>%
+  autofit()
+
+# Print the flextable
+rf_comparison_table
+
+```
+
+
+```{r}
+
+# Set up 10-fold cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Train the logistic regression model using 10-fold cross-validation
+logit_model_cv <- train(y ~ age + job + marital + education + housing + loan + contact + month + 
+                        day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                        cons.price.idx + cons.conf.idx,
+                        data = df, method = "glm", family = binomial,
+                        trControl = train_control)
+
+# Print the results of the cross-validation
+print(logit_model_cv)
+
+
+```
+
+
+
+```{r}
+
+
+# Set up 10-fold cross-validation
+train_control_rf <- trainControl(method = "cv", number = 10)
+
+# Train the Random Forest model using 10-fold cross-validation on the training data
+rf_model_cv <- train(y ~ age + job + marital + education + housing + loan + contact + month + 
+                     day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                     cons.price.idx + cons.conf.idx,
+                     data = train_data, method = "rf", 
+                     ntree = 500,  # Set the number of trees
+                     trControl = train_control_rf, importance = TRUE)
+
+# Print the results of the cross-validation
+print(rf_model_cv)
+
+```
+```{r}
+
+
+# Set up 10-fold cross-validation for the test data
+train_control_test <- trainControl(method = "cv", number = 10)
+
+# Perform logistic regression with 10-fold cross-validation on the test data
+logit_model_cv_test <- train(y ~ age + job + marital + education + housing + loan + contact + month + 
+                             day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                             cons.price.idx + cons.conf.idx,
+                             data = test_data, method = "glm", family = binomial,
+                             trControl = train_control_test)
+
+# Print the cross-validation results for the test data
+print(logit_model_cv_test)
+
+# Predict the probabilities on the test data
+predicted_probabilities_test_cv <- predict(logit_model_cv_test, newdata = test_data, type = "prob")[, 2]
+
+# Convert probabilities to binary outcome (using 0.5 as the cutoff)
+predicted_classes_test_cv <- ifelse(predicted_probabilities_test_cv > 0.5, 1, 0)
+
+# Create a confusion matrix for the test data
+confusion_matrix_test_cv <- table(predicted_classes_test_cv, test_data$y)
+print(confusion_matrix_test_cv)
+
+# Manually input the confusion matrix values
+TN_test_cv <- 82  # True Negatives
+FP_test_cv <- 24  # False Positives
+FN_test_cv <- 19  # False Negatives
+TP_test_cv <- 87  # True Positives
+
+# Calculate accuracy for the test data
+accuracy_test_cv <- (TP_test_cv + TN_test_cv) / (TP_test_cv + TN_test_cv + FP_test_cv + FN_test_cv)
+print(paste("Accuracy (Test with CV):", accuracy_test_cv))
+
+# Calculate precision, recall, and F1 score, handling division by zero
+precision_test_cv <- ifelse((TP_test_cv + FP_test_cv) > 0, TP_test_cv / (TP_test_cv + FP_test_cv), 0)
+recall_test_cv <- ifelse((TP_test_cv + FN_test_cv) > 0, TP_test_cv / (TP_test_cv + FN_test_cv), 0)
+f1_score_test_cv <- ifelse((precision_test_cv + recall_test_cv) > 0,
+                           2 * ((precision_test_cv * recall_test_cv) / (precision_test_cv + recall_test_cv)),
+                           0)
+
+# Print the metrics for the test data
+print(paste("Precision (Test with CV):", precision_test_cv))
+print(paste("Recall (Test with CV):", recall_test_cv))
+print(paste("F1 Score (Test with CV):", f1_score_test_cv))
+
+
+```
+
+```{r}
+
+
+# Set up 10-fold cross-validation for the test data
+train_control_rf_test <- trainControl(method = "cv", number = 10)
+
+# Perform Random Forest with 10-fold cross-validation on the test data
+rf_model_cv_test <- train(y ~ age + job + marital + education + housing + loan + contact + month + 
+                          day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                          cons.price.idx + cons.conf.idx,
+                          data = test_data, method = "rf", 
+                          ntree = 500,  # Number of trees in the Random Forest
+                          trControl = train_control_rf_test)
+
+# Print the cross-validation results for the test data
+print(rf_model_cv_test)
+
+# Predict the classes on the test data using the cross-validated Random Forest model
+predicted_rf_test_cv <- predict(rf_model_cv_test, newdata = test_data)
+
+# Create a confusion matrix for the test data
+confusion_matrix_rf_test_cv <- table(predicted_rf_test_cv, test_data$y)
+print(confusion_matrix_rf_test_cv)
+
+# Manually input the confusion matrix values
+TN_rf_test_cv <- 91  # True Negatives
+FP_rf_test_cv <- 26  # False Positives
+FN_rf_test_cv <- 10  # False Negatives
+TP_rf_test_cv <- 85  # True Positives
+
+# Calculate accuracy for the test data
+accuracy_rf_test_cv <- (TP_rf_test_cv + TN_rf_test_cv) / (TP_rf_test_cv + TN_rf_test_cv + FP_rf_test_cv + FN_rf_test_cv)
+print(paste("Accuracy (Test with CV - Random Forest):", accuracy_rf_test_cv))
+
+# Calculate precision, recall, and F1 score, handling division by zero
+precision_rf_test_cv <- ifelse((TP_rf_test_cv + FP_rf_test_cv) > 0, TP_rf_test_cv / (TP_rf_test_cv + FP_rf_test_cv), 0)
+recall_rf_test_cv <- ifelse((TP_rf_test_cv + FN_rf_test_cv) > 0, TP_rf_test_cv / (TP_rf_test_cv + FN_rf_test_cv), 0)
+f1_score_rf_test_cv <- ifelse((precision_rf_test_cv + recall_rf_test_cv) > 0,
+                              2 * ((precision_rf_test_cv * recall_rf_test_cv) / (precision_rf_test_cv + recall_rf_test_cv)),
+                              0)
+
+# Print the metrics for the test data
+print(paste("Precision (Test with CV - Random Forest):", precision_rf_test_cv))
+print(paste("Recall (Test with CV - Random Forest):", recall_rf_test_cv))
+print(paste("F1 Score (Test with CV - Random Forest):", f1_score_rf_test_cv))
+
+
+```
+```{r}
+
+
+# ---------------------- Logistic Regression with CV ----------------------
+
+# Set up 10-fold cross-validation for the logistic regression on the test data
+train_control_logit_test <- trainControl(method = "cv", number = 10)
+
+# Perform logistic regression with 10-fold cross-validation on the test data
+logit_model_cv_test <- train(y ~ age + job + marital + education + housing + loan + contact + month + 
+                             day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                             cons.price.idx + cons.conf.idx,
+                             data = test_data, method = "glm", family = binomial,
+                             trControl = train_control_logit_test)
+
+# Predict probabilities for ROC curve on the test data
+predicted_probabilities_logit_cv_test <- predict(logit_model_cv_test, newdata = test_data, type = "prob")[, 2]
+
+# Calculate the ROC curve and AUC for logistic regression on the test data
+roc_logit_test <- roc(test_data$y, predicted_probabilities_logit_cv_test)
+auc_logit_test <- auc(roc_logit_test)
+
+# Print the AUC for logistic regression on the test data
+print(paste("AUC (Logistic Regression with CV - Test Data):", auc_logit_test))
+
+# Plot the ROC curve for logistic regression on the test data
+plot(roc_logit_test, main = "ROC Curve - Logistic Regression (Test Data)", col = "blue")
+
+# ---------------------- Random Forest with CV ----------------------
+
+# Set up 10-fold cross-validation for the random forest on the test data
+train_control_rf_test <- trainControl(method = "cv", number = 10)
+
+# Perform Random Forest with 10-fold cross-validation on the test data
+rf_model_cv_test <- train(y ~ age + job + marital + education + housing + loan + contact + month + 
+                          day_of_week + campaign + pdays + previous + poutcome + emp.var.rate + 
+                          cons.price.idx + cons.conf.idx,
+                          data = test_data, method = "rf", 
+                          ntree = 500,  # Number of trees in the Random Forest
+                          trControl = train_control_rf_test)
+
+# Predict probabilities for ROC curve on the test data
+predicted_probabilities_rf_cv_test <- predict(rf_model_cv_test, newdata = test_data, type = "prob")[, 2]
+
+# Calculate the ROC curve and AUC for Random Forest on the test data
+roc_rf_test <- roc(test_data$y, predicted_probabilities_rf_cv_test)
+auc_rf_test <- auc(roc_rf_test)
+
+# Print the AUC for Random Forest on the test data
+print(paste("AUC (Random Forest with CV - Test Data):", auc_rf_test))
+
+# Plot the ROC curve for Random Forest on the test data
+plot(roc_rf_test, main = "ROC Curve - Random Forest (Test Data)", col = "red")
+
+```
+```{r}
+
+# Logistic Regression Cross-Validation Results (updated from the images)
+accuracy_logit <- 0.7972  # Accuracy
+precision_logit <- 0.7384  # Precision
+recall_logit <- 0.8208  # Recall
+f1_score_logit <- 0.8018  # F1 Score
+auc_logit_test <- 0.8907  # AUC for logistic regression
+
+# Random Forest Cross-Validation Results (updated from the images)
+accuracy_rf <- 0.8302  # Accuracy
+precision_rf <- 0.7658  # Precision
+recall_rf <- 0.8947  # Recall
+f1_score_rf <- 0.8254  # F1 Score
+auc_rf_test <- 0.9395  # AUC for random forest
+
+# Create a dataframe for comparison
+metrics_comparison <- data.frame(
+  Metric = c("Accuracy", "Precision", "Recall", "F1 Score", "AUC"),
+  Logistic_Regression = c(accuracy_logit, precision_logit, recall_logit, f1_score_logit, auc_logit_test),
+  Random_Forest = c(accuracy_rf, precision_rf, recall_rf, f1_score_rf, auc_rf_test)
+)
+
+# Create the flextable for model comparison
+comparison_table <- flextable(metrics_comparison)
+
+# Format the flextable with custom styles
+comparison_table <- comparison_table %>%
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "Accuracy") %>%
+  bg(part = "body", bg = "lightblue", i = ~ Metric == "Precision") %>%
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "Recall") %>%
+  bg(part = "body", bg = "lightblue", i = ~ Metric == "F1 Score") %>%
+  bg(part = "body", bg = "lightgray", i = ~ Metric == "AUC") %>%
+  align(j = 2:3, align = "center", part = "body") %>%
+  autofit()
+
+# Print the flextable
+comparison_table
+
+# ---------------------- Bar Graph Comparison ----------------------
+
+# Reshape the data for plotting
+metrics_long <- reshape2::melt(metrics_comparison, id.vars = "Metric", variable.name = "Model", value.name = "Value")
+
+# Create the bar graph
+ggplot(metrics_long, aes(x = Metric, y = Value, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("Logistic_Regression" = "blue", "Random_Forest" = "red")) +
+  labs(title = "Model Comparison - Logistic Regression vs Random Forest", 
+       x = "Metric", y = "Value", fill = "Model") +
+  theme_minimal()
+
+
+```
+### Analytic Report: Logistic Regression vs Random Forest (Cross-Validation Results)
+
+This report compares the performance of two models: **Logistic Regression** and **Random Forest**, using cross-validation on the test data. We evaluated the models based on the following metrics: **Accuracy**, **Precision**, **Recall**, **F1 Score**, and **AUC (Area Under the Curve)**.
+
+#### Overall Findings:
+
+- The **Random Forest model** consistently outperformed **Logistic Regression** in almost all metrics.
+- **Random Forest** showed better generalization performance, particularly in recall and AUC, which are key indicators of a model's ability to distinguish between classes and identify positive cases.
+- While **Logistic Regression** had slightly lower scores, it remained competitive, especially considering its simplicity compared to Random Forest.
+
+#### Metric Comparisons:
+
+1. **Accuracy**:
+   - Logistic Regression: **0.7972**
+   - Random Forest: **0.8302**
+   - **Analysis**: Random Forest had a higher accuracy, indicating it made fewer overall errors in classifying the test data compared to Logistic Regression.
+
+2. **Precision**:
+   - Logistic Regression: **0.7384**
+   - Random Forest: **0.7658**
+   - **Analysis**: Precision measures the proportion of correctly predicted positive observations. Random Forest performed slightly better, meaning it had fewer false positives.
+
+3. **Recall**:
+   - Logistic Regression: **0.8208**
+   - Random Forest: **0.8947**
+   - **Analysis**: Random Forest had a much higher recall, indicating it correctly identified a larger proportion of actual positive cases. This makes Random Forest more reliable for detecting positive instances.
+
+4. **F1 Score**:
+   - Logistic Regression: **0.8018**
+   - Random Forest: **0.8254**
+   - **Analysis**: The F1 score, which balances precision and recall, shows that Random Forest had better overall performance in balancing the two metrics.
+
+5. **AUC (Area Under the Curve)**:
+   - Logistic Regression: **0.8907**
+   - Random Forest: **0.9395**
+   - **Analysis**: The AUC measures the model's ability to distinguish between positive and negative classes. A higher AUC means better discriminatory power. Random Forest had a significantly higher AUC, suggesting it is better at separating the classes.
+
+#### Key Observations:
+
+- **Random Forest excels in recall**: Its ability to detect more positive cases (higher recall) makes it suitable for applications where false negatives are costly.
+- **Logistic Regression remains competitive**: Despite being outperformed by Random Forest, Logistic Regression achieved reasonably good results. Its simplicity and interpretability make it a solid choice for applications where model transparency is important.
+- **Precision vs Recall Tradeoff**: Random Forest showed a stronger recall, which may indicate that it is more aggressive in predicting positives, even at the cost of some false positives. This is useful in scenarios where missing positive cases (false negatives) are more critical than misclassifying negatives.
+
+#### Conclusion:
+- **Random Forest** is the preferred model based on its superior performance across all metrics, particularly in recall and AUC.
+- **Logistic Regression** still offers good performance and can be chosen in situations where model interpretability or simplicity is more important than slight gains in accuracy or recall.
+
+
